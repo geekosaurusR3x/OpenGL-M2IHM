@@ -1,7 +1,151 @@
-#include <stdio.h>
+//include specifique a window
+#ifdef __WINDOWS__
+#include <windows.h>
+#endif
 
-int main(int argc, char **argv)
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include <stdlib.h>
+#include <iostream>
+using namespace std;
+
+#include "eolien.h"
+
+static double Wind = 0;
+Eolien *test = new Eolien();
+
+/* GLUT callback Handlers */
+
+static void resize(int width, int height)
 {
-	printf("hello world\n");
-	return 0;
+    const float ar = (float) width / (float) height;
+
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity() ;
+}
+
+static void display(void)
+{
+	cout<<"Wind : "<<Wind<<endl;
+
+
+    GLUquadric* params = gluNewQuadric();
+
+    gluQuadricDrawStyle(params,GLU_FILL);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+	test->Draw(Wind,params);
+
+    glutSwapBuffers();
+}
+
+
+static void key(unsigned char key, int x, int y)
+{
+	switch (key)
+	{
+		case 'q':
+			exit(0);
+			break;
+		case '+':
+			break;
+		case '-':
+			break;
+	}
+
+	glutPostRedisplay();
+}
+
+static void idle(void)
+{
+    glutPostRedisplay();
+}
+
+void WindChange(int choice)
+{
+	Wind = choice;
+}
+
+void SelectChoice(int choice)
+{
+	switch(choice) {
+    case -1 : exit(0); break;
+	}
+						
+}
+
+const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
+
+const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat high_shininess[] = { 100.0f };
+
+/* Program entry point */
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv);
+    glutInitWindowSize(640,480);
+    glutInitWindowPosition(10,10);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+
+    glutCreateWindow("GLUT Shapes");
+
+	int WindMenu = glutCreateMenu(WindChange);
+		glutAddMenuEntry("Nul",0);
+		glutAddMenuEntry("Lent",2);
+		glutAddMenuEntry("Moyen",5);
+		glutAddMenuEntry("Rapide",10);
+          
+	glutCreateMenu(SelectChoice);
+		glutAddSubMenu("Force du vent",WindMenu);
+		glutAddMenuEntry("Quitter",-1);
+	//menu		
+
+	
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+    glutReshapeFunc(resize);
+    glutDisplayFunc(display);
+    glutKeyboardFunc(key);
+    glutIdleFunc(idle);
+
+    glClearColor(1,1,1,1);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+
+    glutMainLoop();
+
+    return EXIT_SUCCESS;
 }

@@ -19,7 +19,10 @@
 *.dylib
 
 # CodeLight
-*.project
+Projet.project
+Projet.txt
+Projet.mk
+Debug/
 
 # Packages #
 ############
@@ -47,3 +50,4 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+.*~
