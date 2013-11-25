@@ -11,12 +11,13 @@
 
 #include <stdlib.h>
 #include <iostream>
+
+
 using namespace std;
 
-#include "eolien.h"
+#include "world.h"
 
-static double Wind = 0;
-Eolien *test = new Eolien();
+World Monde(2,0.0);
 
 /* GLUT callback Handlers */
 
@@ -35,7 +36,7 @@ static void resize(int width, int height)
 
 static void display(void)
 {
-	cout<<"Wind : "<<Wind<<endl;
+	cout<<"Wind : "<<Monde.GetWind()<<endl;
 
 
     GLUquadric* params = gluNewQuadric();
@@ -43,9 +44,9 @@ static void display(void)
     gluQuadricDrawStyle(params,GLU_FILL);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-	test->Draw(Wind,params);
 
+	Monde.Draw(params);
+	
     glutSwapBuffers();
 }
 
@@ -73,7 +74,15 @@ static void idle(void)
 
 void WindChange(int choice)
 {
-	Wind = choice;
+	Monde.SetWind(choice);
+}
+
+void OtherChangeMenu(int choice)
+{
+	switch(choice) {
+    case 1 : Monde.AddEoliene();break;
+	case 2 : Monde.RemoveEoliene();break;
+	}
 }
 
 void SelectChoice(int choice)
@@ -110,9 +119,14 @@ int main(int argc, char *argv[])
 		glutAddMenuEntry("Lent",2);
 		glutAddMenuEntry("Moyen",5);
 		glutAddMenuEntry("Rapide",10);
+
+	int OtherMenu = glutCreateMenu(OtherChangeMenu);
+		glutAddMenuEntry("Ajouter Eolienne",1);
+		glutAddMenuEntry("Supprimer Eolienne",2);
           
 	glutCreateMenu(SelectChoice);
 		glutAddSubMenu("Force du vent",WindMenu);
+		glutAddSubMenu("Autre",OtherMenu);
 		glutAddMenuEntry("Quitter",-1);
 	//menu		
 
@@ -145,7 +159,11 @@ int main(int argc, char *argv[])
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
 
-    glutMainLoop();
+	//fin initialisation OPENGL
+	//init autre
+	
+	//lancement
+	glutMainLoop();
 
     return EXIT_SUCCESS;
 }

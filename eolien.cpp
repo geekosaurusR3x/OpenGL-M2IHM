@@ -1,7 +1,10 @@
 #include "eolien.h"
 
-Eolien::Eolien()
+Eolien::Eolien(double x, double y, double z)
 {
+	posx = x;
+	posy = y;
+	posz = z;
 	pas = 0;
 }
 
@@ -16,26 +19,26 @@ void Eolien::Draw(double Wind,GLUquadric* params)
 	glColor3d(1,0,0);
 
     glPushMatrix();
-        glTranslated(1.0,1.2,-6);
+        glTranslated(posx+1.0,posy+1.2,posz+-6);
         glRotated(80,1,0,0);
         gluCylinder(params,0.2,0.3,3.5,16,16);
     glPopMatrix();
 
     glPushMatrix();
-        glTranslated(1.0,1.2,-6);
+        glTranslated(posx+1.0,posy+1.2,posz+-6);
         glRotated(80,1,0,0);
         glutSolidCube(0.7);
     glPopMatrix();
 
     glPushMatrix();
-        glTranslated(0.9,1.1,-5);
+        glTranslated(posx+0.9,posy+1.1,posz+-5);
         glRotated(0,1,0,0);
         glRotated(angle,0,0,1);
         glutSolidTorus(0.1,0.1,16,16);
     glPopMatrix();
 
     glPushMatrix();
-        glTranslated(0.9,1.1,-5);
+        glTranslated(posx+0.9,posy+1.1,posz+-5);
         glRotated(0,1,0,0);
         glRotated(angle,0,0,1);
         glBegin(GL_POLYGON);
