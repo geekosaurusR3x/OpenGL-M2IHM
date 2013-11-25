@@ -19,9 +19,12 @@
 *.dylib
 
 # CodeLight
-Projet.project
-Projet.txt
-Projet.mk
+.project
+.project~
+.txt
+.txt~
+.mk
+.mk~
 Debug/
 
 # Packages #
