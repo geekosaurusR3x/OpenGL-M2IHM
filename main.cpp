@@ -10,13 +10,23 @@
 #endif
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <iostream>
 
+#include <getopt.h>
+#include "world.h"
+
+//fin des includes 
+
+//defines
+#define no_argument 0
+#define required_argument 1 
+#define optional_argument 2
+//fin defines
 
 using namespace std;
 
-#include "world.h"
-
+bool debug = true;
 World Monde(2,0.0);
 
 /* GLUT callback Handlers */
@@ -29,16 +39,12 @@ static void resize(int width, int height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity() ;
 }
 
 static void display(void)
 {
-	cout<<"Wind : "<<Monde.GetWind()<<endl;
-
-
     GLUquadric* params = gluNewQuadric();
 
     gluQuadricDrawStyle(params,GLU_FILL);
@@ -88,7 +94,7 @@ void OtherChangeMenu(int choice)
 void SelectChoice(int choice)
 {
 	switch(choice) {
-    case -1 : exit(0); break;
+    case -1 : exit(EXIT_SUCCESS); break;
 	}
 						
 }
@@ -107,12 +113,44 @@ const GLfloat high_shininess[] = { 100.0f };
 
 int main(int argc, char *argv[])
 {
+	debug = true;
+	//parsage des arguments
+	const struct option longopts[] =
+	{
+		{"help", no_argument, 0, 'h'},
+		{"debug", no_argument, 0, 'd'},
+		{0,0,0,0}
+	};
+	
+	int index;
+	int OptArg=0;
+	
+	 //turn off getopt error message
+	  opterr=1; 
+
+	  while(OptArg != -1)
+	  {
+		OptArg = getopt_long(argc, argv, "d:h", longopts, &index);
+
+		switch (OptArg)
+		{
+		  case 'h':
+			cout << "Debug Mode : -d or --debug" << endl;
+			break;
+		  case 'd':
+			cout << "Debug Mode Active"<<endl;
+			debug=true;
+			break;
+		}
+	  }
+	//fin
+
     glutInit(&argc, argv);
     glutInitWindowSize(640,480);
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutCreateWindow("GLUT Shapes");
+    glutCreateWindow("Projet OPENGL");
 
 	int WindMenu = glutCreateMenu(WindChange);
 		glutAddMenuEntry("Nul",0);
@@ -161,7 +199,8 @@ int main(int argc, char *argv[])
 
 	//fin initialisation OPENGL
 	//init autre
-	
+	Monde.SetDebug(debug);
+	Monde.LoadWorld();
 	//lancement
 	glutMainLoop();
 
