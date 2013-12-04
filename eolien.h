@@ -7,12 +7,13 @@
 #include <GL/glut.h>
 #endif
 
+#include "Couleur.h"
 class Eolien
 {
 public:
 	Eolien(double x, double y, double z);
 	~Eolien();
-	void Draw(double Wind,GLUquadric* params);
+	void Draw(double Wind,double OrientationVent);
 
 private:
 	int pas;

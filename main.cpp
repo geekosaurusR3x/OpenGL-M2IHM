@@ -2,7 +2,7 @@
 #ifdef __WINDOWS__
 #include <windows.h>
 #endif
-//test
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -12,9 +12,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
-
 #include <getopt.h>
 #include "world.h"
+#include "camera.h"
 
 //fin des includes 
 
@@ -27,31 +27,33 @@
 using namespace std;
 
 bool debug = true;
-World Monde(2,0.0);
+World Monde(128.0,128.0,128.0);
+MyCamera Camm;
 
 /* GLUT callback Handlers */
 
 static void resize(int width, int height)
 {
-    const float ar = (float) width / (float) height;
+	if (height==0){height=1;}
 
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity() ;
+	glViewport(0,0,width,height);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height, 1 ,200.0f);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 static void display(void)
-{
-    GLUquadric* params = gluNewQuadric();
+{	
+	glLoadIdentity ();
+	glClear (GL_COLOR_BUFFER_BIT);
+	glClear (GL_DEPTH_BUFFER_BIT);
 
-    gluQuadricDrawStyle(params,GLU_FILL);
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	Monde.Draw(params);
+	Camm.PositonCamera(Monde.GetLargeur()/2.0,-(Monde.GetProfondeur()/2.0));
+	Monde.Draw(Camm.GetFlecheX(),Camm.GetFlecheY(),Camm.GetFlecheZ());
+	if(debug && Camm.IsRotateCam()){cout << "PosFleche : "<<Camm.GetFlecheX()<<" "<<Camm.GetFlecheY()<<" "<<Camm.GetFlecheZ()<<endl;}
 	
     glutSwapBuffers();
 }
@@ -64,13 +66,29 @@ static void key(unsigned char key, int x, int y)
 		case 'q':
 			exit(0);
 			break;
-		case '+':
+		case 'r':
+			Camm.TogleRotate();
+			if(debug){cout << "Changement de l'etat de rotation de la cam : "<<Camm.IsRotateCam()<<endl;}
 			break;
 		case '-':
 			break;
 	}
 
 	glutPostRedisplay();
+}
+
+void special(int key, int x, int y)
+{
+    switch (key)
+    {
+        case GLUT_KEY_LEFT :
+			Monde.SetOrientationWind(5);
+            break;
+
+        case GLUT_KEY_RIGHT :
+			Monde.SetOrientationWind(-5);
+            break;
+    }
 }
 
 static void idle(void)
@@ -154,9 +172,9 @@ int main(int argc, char *argv[])
 
 	int WindMenu = glutCreateMenu(WindChange);
 		glutAddMenuEntry("Nul",0);
-		glutAddMenuEntry("Lent",2);
-		glutAddMenuEntry("Moyen",5);
-		glutAddMenuEntry("Rapide",10);
+		glutAddMenuEntry("Lent",80);
+		glutAddMenuEntry("Moyen",160);
+		glutAddMenuEntry("Rapide",240);
 
 	int OtherMenu = glutCreateMenu(OtherChangeMenu);
 		glutAddMenuEntry("Ajouter Eolienne",1);
@@ -173,6 +191,7 @@ int main(int argc, char *argv[])
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
+    glutSpecialFunc(special);
     glutIdleFunc(idle);
 
     glClearColor(1,1,1,1);
