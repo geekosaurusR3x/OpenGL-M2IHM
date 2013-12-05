@@ -1,18 +1,19 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
 #include "eolien.h"
-#include "fonctions.h"
+#include "sky_box.h"
 #include "Couleur.h"
 #include "Fleche.h"
 
 #include <vector>
-#include <string>
 
-#define TEXTURE_SKYBOX_1 1
-#define TEXTURE_SKYBOX_2 2
-#define TEXTURE_SKYBOX_NAME_1 "city"
-#define TEXTURE_SKYBOX_NAME_2 "iceflow"
 class World
 {
 public:
@@ -28,13 +29,16 @@ public:
 	void LoadWorld();
 	void RemoveEoliene();
 	void AddEoliene();
-	void LoadTextureSkybox(int num);
+
 	void Draw(double camX,double camY,double camZ);
 
 	void SetOrientationWind(int Orientation_Wind);
 	int GetOrientationWind() const;
 	
 	void SetNumTexture(int NumTexture);
+	void FogOn();
+	void FogOff();
+	void ChangeSkybox (int num);
 
 private:
 	bool debug;
@@ -45,14 +49,15 @@ private:
 	double Profondeur;
 	double Hauteur;
 	int Orientation_Wind;
+	bool fog;
 
-	GLuint texture_skybox[6];
 	std::vector<Eolien> ListeEolien;
 
 	Fleche Arrow;
+	SkyBox Sky;
 
+	void InitFog();
 	void DrawObject(double camX,double camY,double camZ);
-	void DrawSky();
 };
 
 #endif // WORLD_H

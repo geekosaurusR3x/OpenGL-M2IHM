@@ -14,6 +14,7 @@
 #include <iostream>
 #include <getopt.h>
 #include "world.h"
+#include "sky_box.h"
 #include "camera.h"
 
 //fin des includes 
@@ -134,8 +135,17 @@ void EolieneMenu(int choice)
 
 void SkyBoxMenu(int choice)
 {
-	Monde.LoadTextureSkybox(choice);
+	Monde.ChangeSkybox(choice);
 }
+
+void FogEnableMenu(int choice)
+{
+	switch(choice) {
+		case 0 : Monde.FogOn();break;
+		case 1 : Monde.FogOff();break;
+	}
+}
+
 void SelectChoice(int choice)
 {
 	switch(choice) {
@@ -210,11 +220,16 @@ int main(int argc, char *argv[])
 	int SkyMenu = glutCreateMenu(SkyBoxMenu);
 		glutAddMenuEntry("Ville",TEXTURE_SKYBOX_1);
 		glutAddMenuEntry("Glace",TEXTURE_SKYBOX_2);
+		
+	int FogMenu = glutCreateMenu(FogEnableMenu);
+		glutAddMenuEntry("Oui",0);
+		glutAddMenuEntry("Non",1);
           
 	glutCreateMenu(SelectChoice);
 		glutAddSubMenu("Force du vent",WindMenu);
 		glutAddSubMenu("Eoliennes",EolMenu);
 		glutAddSubMenu("Changer Skybox",SkyMenu);
+		glutAddSubMenu("Brouyard",FogMenu);
 		glutAddMenuEntry("Quitter",-1);
 	//menu		
 
