@@ -77,6 +77,7 @@ void World::LoadWorld()
 
 }
 
+
 void World::Draw(double camX,double camY,double camZ)
 {
 	this->DrawSky();
@@ -96,8 +97,8 @@ void World::RemoveEoliene()
 
 void World::AddEoliene()
 {
-	double X = (Largeur/2.0)+SpaceEolien*nbEoliene;
-	double Z = -Profondeur/2.0;
+	double X = 0+SpaceEolien*nbEoliene;
+	double Z = 0;
 	nbEoliene++;
 	ListeEolien.push_back(Eolien(X,0,Z));
 	
@@ -123,55 +124,57 @@ void World::DrawSky()
 
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
    glColor3f(0,0,0);
-   
+   double x = Largeur/2;
+   double y = Hauteur/2;
+   double z = Profondeur/2;
 	// Rendu de la skybox
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[0]); 
 	glBegin(GL_QUADS); //left
-		glTexCoord2f(0.0, 1.0); glVertex3f(-1.0, -1.0, -1.0); 	
-		glTexCoord2f(1.0,1.0); glVertex3f(-1.0,-1.0,-Profondeur);
-		glTexCoord2f(1.0,0.0); glVertex3f(-1.0,Hauteur,-Profondeur);
-		glTexCoord2f(0.0,0.0); glVertex3f(-1.0,Hauteur,-1.0);
+		glTexCoord2f(0.0, 1.0); glVertex3f(-x, -y, z); 	
+		glTexCoord2f(1.0,1.0); glVertex3f(-x,-y,-z);
+		glTexCoord2f(1.0,0.0); glVertex3f(-x,y,-z);
+		glTexCoord2f(0.0,0.0); glVertex3f(-x,y,z);
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[1]); 
 	glBegin(GL_QUADS);			// front
-		glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,-1.0,-Profondeur);
-		glTexCoord2f(1.0, 1.0); glVertex3f(Largeur,-1.0,-Profondeur);	
-		glTexCoord2f(1.0, 0.0); glVertex3f(Largeur,Hauteur,-Profondeur); 
-		glTexCoord2f(0.0, 0.0); glVertex3f(-1.0,Hauteur,-Profondeur); 
+		glTexCoord2f(0.0, 1.0); glVertex3f(-x,-y,-z);
+		glTexCoord2f(1.0, 1.0); glVertex3f(x,-y,-z);	
+		glTexCoord2f(1.0, 0.0); glVertex3f(x,y,-z); 
+		glTexCoord2f(0.0, 0.0); glVertex3f(-x,y,-z); 
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[2]); 
 	glBegin(GL_QUADS);			// right 	
-		glTexCoord2f(1.0, 1.0); glVertex3f(Largeur,-1.0,-1.0);
-		glTexCoord2f(1.0, 0.0); glVertex3f(Largeur,Hauteur,-1.0); 
-		glTexCoord2f(0.0, 0.0); glVertex3f(Largeur,Hauteur,-Profondeur); 
-		glTexCoord2f(0.0, 1.0); glVertex3f(Largeur,-1.0,-Profondeur);
+		glTexCoord2f(1.0, 1.0); glVertex3f(x,-y,z);
+		glTexCoord2f(1.0, 0.0); glVertex3f(x,y,z); 
+		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,-z); 
+		glTexCoord2f(0.0, 1.0); glVertex3f(x,-y,-z);
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[3]); 
 	glBegin(GL_QUADS);			// back
-		glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,-1.0,-1.0); 
-		glTexCoord2f(1.0, 0.0); glVertex3f(-1.0,Hauteur,-1.0);
-		glTexCoord2f(0.0, 0.0); glVertex3f(Largeur,Hauteur,-1.0);
-		glTexCoord2f(0.0, 1.0); glVertex3f(Largeur,-1.0,-1.0);
+		glTexCoord2f(1.0, 1.0); glVertex3f(-x,-y,z); 
+		glTexCoord2f(1.0, 0.0); glVertex3f(-x,y,z);
+		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,z);
+		glTexCoord2f(0.0, 1.0); glVertex3f(x,-y,z);
 		
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[4]); 
 	glBegin(GL_QUADS);			// top		
-		glTexCoord2f(1.0, 1.0); glVertex3f(-1.0,Hauteur,-1.0);
-		glTexCoord2f(1.0, 0.0); glVertex3f(-1.0,Hauteur,-Profondeur); 	
-		glTexCoord2f(0.0, 0.0); glVertex3f(Largeur,Hauteur,-Profondeur); 
-		glTexCoord2f(0.0, 1.0); glVertex3f(Largeur,Hauteur,-1.0);
+		glTexCoord2f(1.0, 1.0); glVertex3f(-x,y,z);
+		glTexCoord2f(1.0, 0.0); glVertex3f(-x,y,-z); 	
+		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,-z); 
+		glTexCoord2f(0.0, 1.0); glVertex3f(x,y,z);
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[5]);  
 	glBegin(GL_QUADS);			// bottom	
-		glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, -1.0); 
-		glTexCoord2f(0.0, 1.0); glVertex3f(Largeur,-1.0,-1.0); 
-		glTexCoord2f(1.0, 1.0); glVertex3f(Largeur,-1.0,-Profondeur);
-		glTexCoord2f(1.0, 0.0); glVertex3f(-1.0,-1.0,-Profondeur);	
+		glTexCoord2f(0.0, 0.0); glVertex3f(-x, -y, z); 
+		glTexCoord2f(0.0, 1.0); glVertex3f(x,-y,z); 
+		glTexCoord2f(1.0, 1.0); glVertex3f(x,-y,-z);
+		glTexCoord2f(1.0, 0.0); glVertex3f(-x,-y,-z);	
 	glEnd();
 	
 	glDepthMask(GL_TRUE);

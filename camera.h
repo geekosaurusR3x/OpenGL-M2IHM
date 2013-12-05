@@ -22,7 +22,16 @@ public:
 		return Rotate_Cam;
 	}
 
+	void SetRayonRotation(double rayon_rotation) {
+		if (rayon_rotation>0)
+		{
+			this->rayon_rotation = rayon_rotation;
+		}
+	}
 
+	double GetRayonRotation() const {
+		return rayon_rotation;
+	}
 	double GetFlecheX() const {
 		return flecheX;
 	}

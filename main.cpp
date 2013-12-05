@@ -29,6 +29,7 @@ using namespace std;
 bool debug = true;
 World Monde(128.0,128.0,128.0);
 MyCamera Camm;
+double scrollSensivity = 2.0;
 
 /* GLUT callback Handlers */
 
@@ -53,7 +54,6 @@ static void display(void)
 
 	Camm.PositonCamera(Monde.GetLargeur()/2.0,-(Monde.GetProfondeur()/2.0));
 	Monde.Draw(Camm.GetFlecheX(),Camm.GetFlecheY(),Camm.GetFlecheZ());
-	if(debug && Camm.IsRotateCam()){cout << "PosFleche : "<<Camm.GetFlecheX()<<" "<<Camm.GetFlecheY()<<" "<<Camm.GetFlecheZ()<<endl;}
 	
     glutSwapBuffers();
 }
@@ -67,8 +67,6 @@ static void key(unsigned char key, int x, int y)
 			exit(0);
 			break;
 		case 'r':
-			Camm.TogleRotate();
-			if(debug){cout << "Changement de l'etat de rotation de la cam : "<<Camm.IsRotateCam()<<endl;}
 			break;
 		case '-':
 			break;
@@ -90,6 +88,31 @@ void special(int key, int x, int y)
             break;
     }
 }
+
+void mouseMove(int x, int y) 
+{ 	
+}
+
+void mouseButton(int button, int state, int x, int y) 
+{
+	if (button == GLUT_LEFT_BUTTON) {
+		if (state == GLUT_DOWN) {
+			Camm.TogleRotate();
+			if(debug){cout<<"Toggle Rotation : "<<Camm.IsRotateCam()<<endl;}
+		}
+	}
+	if (button == 3)
+	{
+		Camm.SetRayonRotation(Camm.GetRayonRotation()-scrollSensivity);
+		if(debug){cout<<"Zoom : "<<Camm.GetRayonRotation()<<endl;}
+	}
+	if (button == 4)
+	{
+		Camm.SetRayonRotation(Camm.GetRayonRotation()+scrollSensivity);
+		if(debug){cout<<"Zoom : "<<Camm.GetRayonRotation()<<endl;}
+	}
+}
+
 
 static void idle(void)
 {
@@ -164,7 +187,7 @@ int main(int argc, char *argv[])
 	//fin
 
     glutInit(&argc, argv);
-    glutInitWindowSize(640,480);
+    glutInitWindowSize(800,600);
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
@@ -192,6 +215,8 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
     glutSpecialFunc(special);
+	glutMouseFunc(mouseButton);
+	glutMotionFunc(mouseMove);
     glutIdleFunc(idle);
 
     glClearColor(1,1,1,1);
