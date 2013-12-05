@@ -17,7 +17,7 @@ World::~World()
 }
 
 void World::SetWind(double Wind) {
-	if(debug){cout<<"Set Wind: "<< Wind<<endl;}
+	if(debug){cout<<"Force du  vent : "<< Wind<<endl;}
 	this->Wind = Wind;
 }
 double World::GetWind() const {
@@ -54,7 +54,7 @@ int World::GetOrientationWind() const
 void World::LoadWorld()
 {
 	glGenTextures(6, texture_skybox);
-	Load_Texture_Skybox();
+	LoadTextureSkybox(TEXTURE_SKYBOX_1);
 	AddEoliene();
 
 	//Ajout de la fleche
@@ -62,27 +62,33 @@ void World::LoadWorld()
 
 }
 
-void World::Load_Texture_Skybox()
-{	//chargement de textures de la skybox
+void World::LoadTextureSkybox(int num)
+{
+	string name;
+	if (num == TEXTURE_SKYBOX_1)
+	{
+		name = TEXTURE_SKYBOX_NAME_1;
+	}
+	else
+	{
+		name = TEXTURE_SKYBOX_NAME_2;
+	}
+
+	if (debug){cout<<"Chargement Texture Skybox : "<<name<<" Numero :"<<num <<endl;}
 	try
 	{
-/*		loadJpegImage("Pictures/left_sky_box.jpg",texture_skybox[0]); //left
-		loadJpegImage("Pictures/front_sky_box.jpg",texture_skybox[1]); //front
-		loadJpegImage("Pictures/right_sky_box.jpg",texture_skybox[2]); //right
-		loadJpegImage("Pictures/back_sky_box.jpg",texture_skybox[3]); //back
-		loadJpegImage("Pictures/top_sky_box.jpg",texture_skybox[4]); //top
-		loadJpegImage("Pictures/bottom_sky_box.jpg",texture_skybox[5]); //bottom*/
-	
-		loadJpegImage("Pictures/city_left.jpg",texture_skybox[0]); //left
-		loadJpegImage("Pictures/city_front.jpg",texture_skybox[1]); //front
-		loadJpegImage("Pictures/city_right.jpg",texture_skybox[2]); //right
-		loadJpegImage("Pictures/city_back.jpg",texture_skybox[3]); //back
-		loadJpegImage("Pictures/city_top.jpg",texture_skybox[4]); //top
-		loadJpegImage("Pictures/bottom_sky_box.jpg",texture_skybox[5]); //bottom
+		string Dir = "";
+		Dir+="Pictures/";
+		loadJpegImage(Dir+name+"_left.jpg",texture_skybox[0]); //left
+		loadJpegImage(Dir+name+"_front.jpg",texture_skybox[1]); //front
+		loadJpegImage(Dir+name+"_right.jpg",texture_skybox[2]); //right
+		loadJpegImage(Dir+name+"_back.jpg",texture_skybox[3]); //back
+		loadJpegImage(Dir+name+"_top.jpg",texture_skybox[4]); //top
+		loadJpegImage(Dir+name+"_bottom.jpg",texture_skybox[5]); //bottom
 	}
 	catch (const jpeg_load_exception &e)
 	{
-		if (debug){cerr<<e.what()<<endl;}
+		if (debug){cout<<e.what()<<endl;}
 	}
 	
 

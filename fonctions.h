@@ -6,10 +6,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
 #include <iostream>
 #include "jpeg_exception.h"
 
 #include <jpeglib.h>
 #include <jerror.h>
 
-void loadJpegImage(const char *fichier, int numtex);
+
+void loadJpegImage(std::string fichie, int numtex);

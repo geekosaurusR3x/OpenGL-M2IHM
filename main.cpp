@@ -27,7 +27,7 @@
 using namespace std;
 
 bool debug = true;
-World Monde(128.0,128.0,128.0);
+World Monde(1024.0,1024.0,1024.0);
 MyCamera Camm;
 double scrollSensivity = 2.0;
 
@@ -41,7 +41,7 @@ static void resize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height, 1 ,200.0f);
+	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height, 1 ,1024.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -124,7 +124,7 @@ void WindChange(int choice)
 	Monde.SetWind(choice);
 }
 
-void OtherChangeMenu(int choice)
+void EolieneMenu(int choice)
 {
 	switch(choice) {
     case 1 : Monde.AddEoliene();break;
@@ -132,6 +132,10 @@ void OtherChangeMenu(int choice)
 	}
 }
 
+void SkyBoxMenu(int choice)
+{
+	Monde.LoadTextureSkybox(choice);
+}
 void SelectChoice(int choice)
 {
 	switch(choice) {
@@ -199,13 +203,18 @@ int main(int argc, char *argv[])
 		glutAddMenuEntry("Moyen",160);
 		glutAddMenuEntry("Rapide",240);
 
-	int OtherMenu = glutCreateMenu(OtherChangeMenu);
+	int EolMenu = glutCreateMenu(EolieneMenu);
 		glutAddMenuEntry("Ajouter Eolienne",1);
 		glutAddMenuEntry("Supprimer Eolienne",2);
+		
+	int SkyMenu = glutCreateMenu(SkyBoxMenu);
+		glutAddMenuEntry("Ville",TEXTURE_SKYBOX_1);
+		glutAddMenuEntry("Glace",TEXTURE_SKYBOX_2);
           
 	glutCreateMenu(SelectChoice);
 		glutAddSubMenu("Force du vent",WindMenu);
-		glutAddSubMenu("Autre",OtherMenu);
+		glutAddSubMenu("Eoliennes",EolMenu);
+		glutAddSubMenu("Changer Skybox",SkyMenu);
 		glutAddMenuEntry("Quitter",-1);
 	//menu		
 

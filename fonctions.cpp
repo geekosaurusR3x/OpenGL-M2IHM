@@ -4,9 +4,10 @@ using namespace std;
 
 unsigned char *image;
 /* Fonction de chargement d'une image jpeg*/
-void loadJpegImage(const char *fichier, int numtex)
+void loadJpegImage(std::string fichie, int numtex)
 {
   
+	const char *fichier = fichie.c_str();
      struct jpeg_decompress_struct cinfo;
      struct jpeg_error_mgr jerr;
      FILE *file;

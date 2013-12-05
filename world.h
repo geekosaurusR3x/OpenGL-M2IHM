@@ -9,6 +9,10 @@
 #include <vector>
 #include <string>
 
+#define TEXTURE_SKYBOX_1 1
+#define TEXTURE_SKYBOX_2 2
+#define TEXTURE_SKYBOX_NAME_1 "city"
+#define TEXTURE_SKYBOX_NAME_2 "iceflow"
 class World
 {
 public:
@@ -24,10 +28,13 @@ public:
 	void LoadWorld();
 	void RemoveEoliene();
 	void AddEoliene();
+	void LoadTextureSkybox(int num);
 	void Draw(double camX,double camY,double camZ);
 
 	void SetOrientationWind(int Orientation_Wind);
 	int GetOrientationWind() const;
+	
+	void SetNumTexture(int NumTexture);
 
 private:
 	bool debug;
@@ -46,7 +53,6 @@ private:
 
 	void DrawObject(double camX,double camY,double camZ);
 	void DrawSky();
-	void Load_Texture_Skybox();
 };
 
 #endif // WORLD_H
