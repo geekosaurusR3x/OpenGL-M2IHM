@@ -226,8 +226,8 @@ int main(int argc, char *argv[])
 		glutAddMenuEntry("Supprimer Eolienne",2);
 		
 	int SkyMenu = glutCreateMenu(SkyBoxMenu);
-		glutAddMenuEntry("Ville",TEXTURE_SKYBOX_1);
-		glutAddMenuEntry("Glace",TEXTURE_SKYBOX_2);
+		glutAddMenuEntry(TEXTURE_SKYBOX_NAME_1,TEXTURE_SKYBOX_1);
+		glutAddMenuEntry(TEXTURE_SKYBOX_NAME_2,TEXTURE_SKYBOX_2);
 		
 	int FogMenu = glutCreateMenu(FogEnableMenu);
 		glutAddMenuEntry("Oui",0);
