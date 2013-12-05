@@ -54,22 +54,7 @@ int World::GetOrientationWind() const
 void World::LoadWorld()
 {
 	glGenTextures(6, texture_skybox);
-	//chargement de textures de la skybox
-	try
-	{
-		loadJpegImage("Pictures/left_sky_box.jpg",texture_skybox[0]); //left
-		loadJpegImage("Pictures/front_sky_box.jpg",texture_skybox[1]); //front
-		loadJpegImage("Pictures/right_sky_box.jpg",texture_skybox[2]); //right
-		loadJpegImage("Pictures/back_sky_box.jpg",texture_skybox[3]); //back
-		loadJpegImage("Pictures/top_sky_box.jpg",texture_skybox[4]); //top
-		loadJpegImage("Pictures/bottom_sky_box.jpg",texture_skybox[5]); //bottom
-	}
-	catch (const jpeg_load_exception &e)
-	{
-		if (debug){cerr<<e.what()<<endl;}
-	}
-	
-	 
+	Load_Texture_Skybox();
 	AddEoliene();
 
 	//Ajout de la fleche
@@ -77,7 +62,31 @@ void World::LoadWorld()
 
 }
 
+void World::Load_Texture_Skybox()
+{	//chargement de textures de la skybox
+	try
+	{
+/*		loadJpegImage("Pictures/left_sky_box.jpg",texture_skybox[0]); //left
+		loadJpegImage("Pictures/front_sky_box.jpg",texture_skybox[1]); //front
+		loadJpegImage("Pictures/right_sky_box.jpg",texture_skybox[2]); //right
+		loadJpegImage("Pictures/back_sky_box.jpg",texture_skybox[3]); //back
+		loadJpegImage("Pictures/top_sky_box.jpg",texture_skybox[4]); //top
+		loadJpegImage("Pictures/bottom_sky_box.jpg",texture_skybox[5]); //bottom*/
+	
+		loadJpegImage("Pictures/city_left.jpg",texture_skybox[0]); //left
+		loadJpegImage("Pictures/city_front.jpg",texture_skybox[1]); //front
+		loadJpegImage("Pictures/city_right.jpg",texture_skybox[2]); //right
+		loadJpegImage("Pictures/city_back.jpg",texture_skybox[3]); //back
+		loadJpegImage("Pictures/city_top.jpg",texture_skybox[4]); //top
+		loadJpegImage("Pictures/bottom_sky_box.jpg",texture_skybox[5]); //bottom
+	}
+	catch (const jpeg_load_exception &e)
+	{
+		if (debug){cerr<<e.what()<<endl;}
+	}
+	
 
+}
 void World::Draw(double camX,double camY,double camZ)
 {
 	this->DrawSky();
@@ -163,10 +172,10 @@ void World::DrawSky()
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[4]); 
 	glBegin(GL_QUADS);			// top		
-		glTexCoord2f(1.0, 1.0); glVertex3f(-x,y,z);
-		glTexCoord2f(1.0, 0.0); glVertex3f(-x,y,-z); 	
-		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,-z); 
-		glTexCoord2f(0.0, 1.0); glVertex3f(x,y,z);
+		glTexCoord2f(0.0, 0.0); glVertex3f(-x,y,z);
+		glTexCoord2f(0.0, 1.0); glVertex3f(-x,y,-z); 	
+		glTexCoord2f(1.0, 1.0); glVertex3f(x,y,-z); 
+		glTexCoord2f(1.0, 0.0); glVertex3f(x,y,z);
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[5]);  

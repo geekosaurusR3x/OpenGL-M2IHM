@@ -7,6 +7,7 @@
 #include "Fleche.h"
 
 #include <vector>
+#include <string>
 
 class World
 {
@@ -45,6 +46,7 @@ private:
 
 	void DrawObject(double camX,double camY,double camZ);
 	void DrawSky();
+	void Load_Texture_Skybox();
 };
 
 #endif // WORLD_H
