@@ -4,9 +4,9 @@ MyCamera::MyCamera()
 {
   this->Rotate_Cam=false;
   this->angle_cam = 0.0;
-  this->rayon_rotation = 100.0;
-  this->camY = 10.0;
-  this->flecheY = 10.0;
+  this->rayon_rotation = 450.0;
+  this->camY = 200.0;
+  this->flecheY = this->camY;
 }
 
 MyCamera::~MyCamera()
@@ -27,7 +27,7 @@ void MyCamera::PositonCamera(double xCentre, double zCentre)
   this->flecheX = 0 + (this->rayon_rotation-1.5)*cos(this->angle_cam);
   this->flecheZ = 0 + (this->rayon_rotation-1.5)*sin(this->angle_cam);
   
-  gluLookAt (this->camX,this->camY,this->camZ, 0,5.0,0,0.0,1.0,0.0);
+  gluLookAt (this->camX,this->camY,this->camZ, 0,90.0,0,0.0,1.0,0.0);
 }
 
 void MyCamera::TogleRotate()

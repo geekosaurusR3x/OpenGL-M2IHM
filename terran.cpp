@@ -19,13 +19,13 @@ void Terran::Load()
 	{
 		struct jpeg_decompress_struct cinfo;
 		image = loadJpegImage(this->Data_Dir+"/Maps/map.jpg",&cinfo);
-		for (int z = 0; z < MAP_Z; z++)
+		for (int z = 0; z < SIZE_MAP; z++)
 		{
-			for (int x = 0; x < MAP_X; x++)
+			for (int x = 0; x < SIZE_MAP; x++)
 			{
-				terrain[x][z][0] = (float(x)*MAP_SCALE)-512.0;
-				terrain[x][z][1] = (float)image[(z*MAP_Z+x)*3];
-				terrain[x][z][2] = -(float(z)*MAP_SCALE)+512;
+				terrain[x][z][0] = (double(x)*Map_Scale)-Size_Demi_Wordl;
+				terrain[x][z][1] = (double)image[(z*SIZE_MAP+x)*3];
+				terrain[x][z][2] = -(double(z)*Map_Scale)+Size_Demi_Wordl;
 				if (debug){cout<<"terrain "<<terrain[x][z][0]<<" "<<terrain[x][z][1]<<" "<<terrain[x][z][1]<<endl;}
 			}
 		}
@@ -56,10 +56,10 @@ void Terran::Draw()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glBindTexture(GL_TEXTURE_2D, texture_terrain[0]); 
 	glPushMatrix();
-    for (int z = 0; z < MAP_Z-1; z++)
+    for (int z = 0; z < SIZE_MAP-1; z++)
     {
         glBegin(GL_TRIANGLE_STRIP);
-        for (int x = 0; x < MAP_X-1; x++)
+        for (int x = 0; x < SIZE_MAP-1; x++)
         {
             glTexCoord2f(0.0f, 0.0f);
             glColor3f(terrain[x][z][1]/255.0f, terrain[x][z][1]/255.0f, terrain[x][z][1]/255.0f);
@@ -84,4 +84,22 @@ void Terran::Draw()
     }
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D); 
+}
+
+double Terran::GetHauteurPos(double X, double Z)
+{
+	X+=Size_Demi_Wordl;
+	Z+=Size_Demi_Wordl;
+	int x = X / Map_Scale;
+	int z = Z /Map_Scale;
+	
+	double hauteur_moyene = (terrain[x][z][1]+terrain[x+1][z][1]+terrain[x][z+1][1]+terrain[x+1][z+1][1])/4;
+	if (debug){cout<<"Hauteur en X : "<<x<<" Z : "<<z<<" = "<<hauteur_moyene<<endl;}
+	return hauteur_moyene;
+}
+
+void Terran::SetSizeWordl(double Size_Wordl)
+{
+	this->Size_Demi_Wordl = Size_Wordl/2;
+	this->Map_Scale = Size_Wordl/SIZE_MAP;
 }

@@ -1,9 +1,7 @@
 #ifndef TERRAN_H
 #define TERRAN_H
 
-#define MAP_X   32                     // size of map along x-axis
-#define MAP_Z   32                      // size of map along z-axis
-#define MAP_SCALE  32.0f
+#define SIZE_MAP   32                     // size of map along x-axis
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -29,9 +27,17 @@ public:
 	void SetDataDir(const std::string& Data_Dir) {
 		this->Data_Dir = Data_Dir;
 	}
+
+	double GetMapScale() const {
+		return Map_Scale;
+	}
+	void SetSizeWordl(double Size_Wordl);
+	double GetHauteurPos(double X,double Z);
 private:
 	bool debug;
-	float terrain[MAP_X][MAP_Z][3];
+	double terrain[SIZE_MAP][SIZE_MAP][3];
+	double Size_Demi_Wordl;
+	double Map_Scale;
 	GLuint texture_terrain[1];
 	std::string Data_Dir;
 };

@@ -15,11 +15,15 @@ public:
 	~Eolien();
 	void Draw(double Wind,double OrientationVent);
 
+	void SetZoom(double Zoom) {
+		this->Zoom = Zoom;
+	}
 private:
 	int pas;
 	double posx;
 	double posy;
 	double posz;
+	double Zoom;
 };
 
 #endif // EOLIEN_H

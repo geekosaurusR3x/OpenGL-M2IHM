@@ -1,14 +1,14 @@
 #include "world.h"
 using namespace std;
 
-World::World(double largeur,double hauteur,double profondeur)
+World::World(double size)
 {
 	this->Wind = 0;
 	this->SpaceEolien =5;
 	this->nbEoliene = 0;
-	this->Hauteur = hauteur;
-	this->Largeur = largeur;
-	this->Profondeur = profondeur;
+	this->Hauteur = size;
+	this->Largeur = size;
+	this->Profondeur = size;
 	this->Orientation_Wind = 0;
 	this->fog = true;
 }
@@ -61,6 +61,7 @@ void World::LoadWorld()
 	Sky.LoadSkybox();
 	//Ajout du sol
 	Sol.SetDebug(debug);
+	Sol.SetSizeWordl(Hauteur);
 	Sol.SetDataDir(this->Data_Dir);
 	Sol.Load();
 	AddEoliene();
@@ -118,9 +119,11 @@ void World::AddEoliene()
 	double X = 0+SpaceEolien*nbEoliene;
 	double Z = 0;
 	nbEoliene++;
-	ListeEolien.push_back(Eolien(X,0,Z));
-	
-	if(debug){cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;}
+	ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z));
+	ListeEolien.back().SetZoom(Sol.GetMapScale());
+	if(debug){
+		cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
+	}
 }
 
 void World::DrawObject(double camX,double camY,double camZ)

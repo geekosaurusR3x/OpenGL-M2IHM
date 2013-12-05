@@ -29,7 +29,7 @@
 using namespace std;
 
 bool debug = true;
-World Monde(1024.0,1024.0,1024.0);
+World Monde(1024.0);
 MyCamera Camm;
 double scrollSensivity = 2.0;
 

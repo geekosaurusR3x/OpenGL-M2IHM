@@ -19,7 +19,7 @@
 class World
 {
 public:
-	World(double Largeur,double Profondeur,double Hauteur);
+	World(double size);
 	~World();
 	void SetWind(double Wind);
 	double GetWind() const;
