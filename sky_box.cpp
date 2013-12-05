@@ -40,12 +40,12 @@ void SkyBox::LoadTexture(int num)
 	{
 		string Dir = "";
 		Dir+="Pictures/";
-		loadJpegImage(Dir+name+"_left.jpg",texture_skybox[0]); //left
-		loadJpegImage(Dir+name+"_front.jpg",texture_skybox[1]); //front
-		loadJpegImage(Dir+name+"_right.jpg",texture_skybox[2]); //right
-		loadJpegImage(Dir+name+"_back.jpg",texture_skybox[3]); //back
-		loadJpegImage(Dir+name+"_top.jpg",texture_skybox[4]); //top
-		loadJpegImage(Dir+name+"_bottom.jpg",texture_skybox[5]); //bottom
+		loadJpegTexture(Dir+name+"_left.jpg",texture_skybox[0]); //left
+		loadJpegTexture(Dir+name+"_front.jpg",texture_skybox[1]); //front
+		loadJpegTexture(Dir+name+"_right.jpg",texture_skybox[2]); //right
+		loadJpegTexture(Dir+name+"_back.jpg",texture_skybox[3]); //back
+		loadJpegTexture(Dir+name+"_top.jpg",texture_skybox[4]); //top
+		loadJpegTexture(Dir+name+"_bottom.jpg",texture_skybox[5]); //bottom
 	}
 	catch (const jpeg_load_exception &e)
 	{

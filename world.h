@@ -11,6 +11,7 @@
 #include "sky_box.h"
 #include "Couleur.h"
 #include "Fleche.h"
+#include "terran.h"
 
 #include <vector>
 
@@ -55,7 +56,7 @@ private:
 
 	Fleche Arrow;
 	SkyBox Sky;
-
+	Terran Sol;
 	void InitFog();
 	void DrawObject(double camX,double camY,double camZ);
 };

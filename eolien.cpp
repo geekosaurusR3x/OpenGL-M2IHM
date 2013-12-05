@@ -23,6 +23,7 @@ void Eolien::Draw(double Wind, double OrientationVent)
     gluQuadricDrawStyle(params,GLU_FILL);
     //couleur de l'éolienne
     glColor4dv(rougeFonce);
+	glScalef(100.0f, 100.0f, 100.0f);
     glPushMatrix();
         //pied de l'eolienne
         glPushMatrix();

@@ -58,6 +58,9 @@ void World::LoadWorld()
 	Sky = SkyBox(Largeur,Hauteur,Profondeur);
 	Sky.SetDebug(this->debug);
 	Sky.LoadSkybox();
+	//Ajout du sol
+	Sol.SetDebug(debug);
+	Sol.Load();
 	AddEoliene();
 	//Ajout de la fleche
 	Arrow = Fleche();
@@ -122,6 +125,8 @@ void World::DrawObject(double camX,double camY,double camZ)
 {
 	//Affichange de la skybox
 	Sky.Draw();
+	//Affichange du sol
+	Sol.Draw();
 	//affichage de la fleche
 	Arrow.Draw(camX,camY,camZ,this->Orientation_Wind);
 	//Boucle affichages objects
