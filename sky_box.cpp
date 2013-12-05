@@ -12,6 +12,7 @@ SkyBox::SkyBox(double larg,double haut,double pro)
 	this->Largeur = larg;
 	this->Hauteur = haut;
 	this->Profondeur = pro;
+	this->Data_Dir	 = "";
 }
 
 SkyBox::~SkyBox()
@@ -38,14 +39,13 @@ void SkyBox::LoadTexture(int num)
 	if (debug){cout<<"Chargement Texture Skybox : "<<name<<" Numero :"<<num <<endl;}
 	try
 	{
-		string Dir = "";
-		Dir+="Pictures/";
-		loadJpegTexture(Dir+name+"_left.jpg",texture_skybox[0]); //left
-		loadJpegTexture(Dir+name+"_front.jpg",texture_skybox[1]); //front
-		loadJpegTexture(Dir+name+"_right.jpg",texture_skybox[2]); //right
-		loadJpegTexture(Dir+name+"_back.jpg",texture_skybox[3]); //back
-		loadJpegTexture(Dir+name+"_top.jpg",texture_skybox[4]); //top
-		loadJpegTexture(Dir+name+"_bottom.jpg",texture_skybox[5]); //bottom
+	
+		loadJpegTexture(Data_Dir+"/Textures/"+name+"_left.jpg",texture_skybox[0]); //left
+		loadJpegTexture(Data_Dir+"/Textures/"+name+"_front.jpg",texture_skybox[1]); //front
+		loadJpegTexture(Data_Dir+"/Textures/"+name+"_right.jpg",texture_skybox[2]); //right
+		loadJpegTexture(Data_Dir+"/Textures/"+name+"_back.jpg",texture_skybox[3]); //back
+		loadJpegTexture(Data_Dir+"/Textures/"+name+"_top.jpg",texture_skybox[4]); //top
+		loadJpegTexture(Data_Dir+"/Textures/"+name+"_bottom.jpg",texture_skybox[5]); //bottom
 	}
 	catch (const jpeg_load_exception &e)
 	{

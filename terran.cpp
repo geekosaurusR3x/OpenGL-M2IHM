@@ -3,7 +3,7 @@
 using namespace std;
 Terran::Terran()
 {
-	
+		this->Data_Dir = "";
 }
 
 Terran::~Terran()
@@ -13,13 +13,12 @@ Terran::~Terran()
 void Terran::Load()
 {
 	unsigned char *image = 0;
-	string Dir = "";
-	Dir+="Pictures/";
+	
 	if (debug){cout<<"Chargement du fichier map"<<endl;}
 	try
 	{
 		struct jpeg_decompress_struct cinfo;
-		image = loadJpegImage(Dir+"map.jpg",&cinfo);
+		image = loadJpegImage(this->Data_Dir+"/Maps/map.jpg",&cinfo);
 		for (int z = 0; z < MAP_Z; z++)
 		{
 			for (int x = 0; x < MAP_X; x++)
@@ -43,7 +42,7 @@ void Terran::Load()
 	if (debug){cout<<"Chargement Texture terrain"<<endl;}
 	try
 	{
-		loadJpegTexture(Dir+"grass.jpg",texture_terrain[0]); //left
+		loadJpegTexture(this->Data_Dir+"/Textures/grass.jpg",texture_terrain[0]); //left
 	}
 	catch (const jpeg_load_exception &e)
 	{

@@ -13,6 +13,7 @@
 #include "Fleche.h"
 #include "terran.h"
 
+#include <string>
 #include <vector>
 
 class World
@@ -35,11 +36,18 @@ public:
 
 	void SetOrientationWind(int Orientation_Wind);
 	int GetOrientationWind() const;
-	
+
 	void SetNumTexture(int NumTexture);
 	void FogOn();
 	void FogOff();
 	void ChangeSkybox (int num);
+
+	void SetDataDir(const std::string& Data_Dir) {
+		this->Data_Dir = Data_Dir;
+	}
+	const std::string& GetDataDir() const {
+		return Data_Dir;
+	}
 
 private:
 	bool debug;
@@ -51,6 +59,7 @@ private:
 	double Hauteur;
 	int Orientation_Wind;
 	bool fog;
+	std::string Data_Dir;
 
 	std::vector<Eolien> ListeEolien;
 

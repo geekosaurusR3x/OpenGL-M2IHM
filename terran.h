@@ -25,10 +25,15 @@ public:
 	void SetDebug(bool debug) {
 		this->debug = debug;
 	}
+
+	void SetDataDir(const std::string& Data_Dir) {
+		this->Data_Dir = Data_Dir;
+	}
 private:
 	bool debug;
 	float terrain[MAP_X][MAP_Z][3];
 	GLuint texture_terrain[1];
+	std::string Data_Dir;
 };
 
 #endif // TERRAN_H

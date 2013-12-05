@@ -8,4 +8,5 @@ glut
 libjpeg
 
 Parametres :
- -d / --devel : print somes outputs for debugin
+ -v / --verbose : print somes outputs for debugin
+ -d "WhaterverDir" / --datadir "WhaterverDir" : Change data dir

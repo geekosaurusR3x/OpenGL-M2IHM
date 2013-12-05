@@ -23,6 +23,7 @@
 #define no_argument 0
 #define required_argument 1 
 #define optional_argument 2
+#define DATA_DIR "Datas"
 //fin defines
 
 using namespace std;
@@ -169,11 +170,13 @@ const GLfloat high_shininess[] = { 100.0f };
 int main(int argc, char *argv[])
 {
 	debug = true;
+	string datadir = DATA_DIR;
 	//parsage des arguments
 	const struct option longopts[] =
 	{
 		{"help", no_argument, 0, 'h'},
-		{"debug", no_argument, 0, 'd'},
+		{"verbose", no_argument, 0, 'v'},
+		{"datadir", required_argument, 0, 'd'},
 		{0,0,0,0}
 	};
 	
@@ -185,16 +188,21 @@ int main(int argc, char *argv[])
 
 	  while(OptArg != -1)
 	  {
-		OptArg = getopt_long(argc, argv, "d:h", longopts, &index);
+		OptArg = getopt_long(argc, argv, "vd:h", longopts, &index);
 
 		switch (OptArg)
 		{
 		  case 'h':
-			cout << "Debug Mode : -d or --debug" << endl;
+			cout << "Debug Mode : -v or --verbose" << endl;
+			cout << "Specifi another Data Dir : -d or --datatdir exp: --datadir 'test' " << endl;
 			break;
-		  case 'd':
+		  case 'v':
 			cout << "Debug Mode Active"<<endl;
 			debug=true;
+			break;
+		  case 'd':
+			cout <<"Other Data Dir passed : "<<optarg<<endl;
+			datadir = optarg;
 			break;
 		}
 	  }
@@ -268,6 +276,7 @@ int main(int argc, char *argv[])
 	//fin initialisation OPENGL
 	//init autre
 	Monde.SetDebug(debug);
+	Monde.SetDataDir(datadir);
 	Monde.LoadWorld();
 	//lancement
 	glutMainLoop();

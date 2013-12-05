@@ -57,9 +57,11 @@ void World::LoadWorld()
 	//Ajout de la skybox
 	Sky = SkyBox(Largeur,Hauteur,Profondeur);
 	Sky.SetDebug(this->debug);
+	Sky.SetDataDir(this->Data_Dir);
 	Sky.LoadSkybox();
 	//Ajout du sol
 	Sol.SetDebug(debug);
+	Sol.SetDataDir(this->Data_Dir);
 	Sol.Load();
 	AddEoliene();
 	//Ajout de la fleche

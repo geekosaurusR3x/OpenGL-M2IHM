@@ -28,12 +28,17 @@ public:
 	void SetDebug(bool debug) {
 		this->debug = debug;
 	}
+
+	void SetDataDir(const std::string& Data_Dir) {
+		this->Data_Dir = Data_Dir;
+	}
 private:
 	GLuint texture_skybox[6];
 	bool debug;
 	double Largeur;
 	double Hauteur;
 	double Profondeur;
+	std::string Data_Dir;
 };
 
 #endif // SKYBOX_H
