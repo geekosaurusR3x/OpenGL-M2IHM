@@ -21,4 +21,6 @@ unsigned char * loadJpegImage(std::string fichie, jpeg_decompress_struct *cinfo)
 void loadJpegTexture(std::string fichie, int numtex);
 
 void loadJpegMap(std::string, float terran[32][32][3]);
+
+float RandFloat(float start, float end);
 #endif // FONCTIONS_H

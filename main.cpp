@@ -169,6 +169,7 @@ const GLfloat high_shininess[] = { 100.0f };
 
 int main(int argc, char *argv[])
 {
+	srand (time(NULL));
 	debug = true;
 	string datadir = DATA_DIR;
 	//parsage des arguments

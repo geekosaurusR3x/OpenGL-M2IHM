@@ -12,9 +12,11 @@
 #include "Couleur.h"
 #include "Fleche.h"
 #include "terran.h"
+#include "fonctions.h"
 
 #include <string>
 #include <vector>
+#include <math.h>
 
 class World
 {

@@ -56,5 +56,9 @@ unsigned char * loadJpegImage(std::string fichie,jpeg_decompress_struct *cinfo)
   
   }
   
-
-
+float RandFloat(float start, float end) {
+    float random = ((float) rand()) / (float) RAND_MAX;
+    float diff = end - start;
+    float result = random * diff;
+    return start + result;
+}

@@ -116,14 +116,17 @@ void World::RemoveEoliene()
 
 void World::AddEoliene()
 {
-	double X = 0+SpaceEolien*nbEoliene;
-	double Z = 0;
+	double rayon = RandFloat(0.0,Largeur/2);
+	double angle = RandFloat(0.0,360.0);
+	double X = 0 + rayon*cos(angle);
+	double Z = 0 + rayon*sin(angle);
 	nbEoliene++;
-	ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z));
-	ListeEolien.back().SetZoom(Sol.GetMapScale());
 	if(debug){
 		cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
 	}
+	ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z));
+	ListeEolien.back().SetZoom(Sol.GetMapScale());
+
 }
 
 void World::DrawObject(double camX,double camY,double camZ)

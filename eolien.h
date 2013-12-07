@@ -16,7 +16,7 @@ public:
 	void Draw(double Wind,double OrientationVent);
 
 	void SetZoom(double Zoom) {
-		this->Zoom = Zoom;
+		this->Zoom = 32.0;
 	}
 private:
 	int pas;

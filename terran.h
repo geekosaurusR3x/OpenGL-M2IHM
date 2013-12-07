@@ -1,7 +1,7 @@
 #ifndef TERRAN_H
 #define TERRAN_H
 
-#define SIZE_MAP   32                     // size of map along x-axis
+#define SIZE_MAP   512                     // size of map along x-axis
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -11,6 +11,7 @@
 
 #include "fonctions.h"
 #include "jpeg_exception.h"
+#include <math.h>
 
 class Terran
 {

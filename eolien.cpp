@@ -24,8 +24,9 @@ void Eolien::Draw(double Wind, double OrientationVent)
     //couleur de l'éolienne
     glColor4dv(rougeFonce);
 	glPushMatrix();
-		glTranslated(posx,posy+2*Zoom,posz);
+		glTranslated(posx,posy,posz);
 		glScalef(Zoom, Zoom, Zoom);
+		glTranslated(0,2,0);
 		glPushMatrix();
 			//pied de l'eolienne
 			glPushMatrix();
