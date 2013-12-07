@@ -143,3 +143,9 @@ void World::DrawObject(double camX,double camY,double camZ)
 		ListeEolien[i].Draw(this->Wind,this->Orientation_Wind);
 	}
 }
+
+void World::ChangeTextureMap(int num)
+{
+	Sol.TextureNice();
+	if(num == 0){Sol.TexureCrapy();}
+}

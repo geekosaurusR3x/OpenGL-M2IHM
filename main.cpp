@@ -32,6 +32,7 @@ bool debug = true;
 World Monde(1024.0);
 MyCamera Camm;
 double scrollSensivity = 2.0;
+int frameCount = 0;
 
 /* GLUT callback Handlers */
 
@@ -147,6 +148,12 @@ void FogEnableMenu(int choice)
 	}
 }
 
+void TextureMapMenu(int choice)
+{
+	Monde.ChangeTextureMap(choice);
+}
+
+
 void SelectChoice(int choice)
 {
 	switch(choice) {
@@ -234,11 +241,16 @@ int main(int argc, char *argv[])
 		glutAddMenuEntry("Oui",0);
 		glutAddMenuEntry("Non",1);
           
+	int MapMenu = glutCreateMenu(TextureMapMenu);
+		glutAddMenuEntry("Texture herbe",0);
+		glutAddMenuEntry("Texture Zerg",1);
+		
 	glutCreateMenu(SelectChoice);
 		glutAddSubMenu("Force du vent",WindMenu);
 		glutAddSubMenu("Eoliennes",EolMenu);
 		glutAddSubMenu("Changer Skybox",SkyMenu);
 		glutAddSubMenu("Brouyard",FogMenu);
+		glutAddSubMenu("Sol",MapMenu);
 		glutAddMenuEntry("Quitter",-1);
 	//menu		
 

@@ -39,10 +39,10 @@ public:
 	void SetOrientationWind(int Orientation_Wind);
 	int GetOrientationWind() const;
 
-	void SetNumTexture(int NumTexture);
 	void FogOn();
 	void FogOff();
 	void ChangeSkybox (int num);
+	void ChangeTextureMap(int num);
 
 	void SetDataDir(const std::string& Data_Dir) {
 		this->Data_Dir = Data_Dir;

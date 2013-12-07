@@ -1,0 +1,6 @@
+Textures skybox :
+http://www.redsorceress.com/skybox.html
+
+Generation de la texture par melange d'autre :
+Fortement inspiré par :
+http://fearyourself.developpez.com/tutoriel/jeu/TexTerrainGen/
