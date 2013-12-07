@@ -67,3 +67,64 @@ float RandFloat(float start, float end) {
     float result = random * diff;
     return start + result;
 }
+
+void extractOBJdata(std::string file, float positions[][3], float texels[][2], float normals[][3], int faces[][9])
+{
+    // Counters
+    int p = 0;
+    int t = 0;
+    int n = 0;
+    int f = 0;
+ 
+
+    // Open OBJ file
+    ifstream inOBJ(file.c_str(),ios::in);
+	if (!inOBJ)
+	{
+       throw jpeg_load_exception(file.c_str(),"No sutch file or directory");
+	}
+  
+	
+	string line;
+    // Read OBJ file
+    while(getline(inOBJ, line))
+    {
+
+        string type = line.substr(0,2);
+ 
+		// Positions
+		if(type.compare("v ") == 0)
+		{
+		 
+			// 2
+			// Extract tokens
+			int i = 0;
+			stringstream stream(line);
+			string val;
+			while( getline(stream, val, ' ') )
+			{
+				positions[p][i] = atof( val.c_str() );
+				i++;
+			}
+			p++;
+		}
+ 
+        // Texels
+        else if(type.compare("vt") == 0)
+        {
+        }
+ 
+        // Normals
+        else if(type.compare("vn") == 0)
+        {
+        }
+ 
+        // Faces
+        else if(type.compare("f ") == 0)
+        {
+        }
+    }
+ 
+    // Close OBJ file
+    inOBJ.close();
+}

@@ -4,11 +4,8 @@ using namespace std;
 World::World(double size)
 {
 	this->Wind = 0;
-	this->SpaceEolien =5;
 	this->nbEoliene = 0;
-	this->Hauteur = size;
-	this->Largeur = size;
-	this->Profondeur = size;
+	this->Size = size;
 	this->Orientation_Wind = 0;
 	this->fog = true;
 }
@@ -31,14 +28,8 @@ bool World::IsDebug() const {
 	return debug;
 }
 
-double World::GetHauteur() const {
-	return Hauteur;
-}
-double World::GetProfondeur() const {
-	return Profondeur;
-}
-double World::GetLargeur() const {
-	return Largeur;
+double World::GetSize() const {
+	return this->Size;
 }
 	
 void  World::SetOrientationWind(int Orientation_Wind)
@@ -55,13 +46,14 @@ int World::GetOrientationWind() const
 void World::LoadWorld()
 {
 	//Ajout de la skybox
-	Sky = SkyBox(Largeur,Hauteur,Profondeur);
+	double Demi_Size = this->Size/2;
+	Sky = SkyBox(-Demi_Size,-Demi_Size,Demi_Size,this->Size);
 	Sky.SetDebug(this->debug);
 	Sky.SetDataDir(this->Data_Dir);
-	Sky.LoadSkybox();
+	Sky.Load();
 	//Ajout du sol
 	Sol.SetDebug(debug);
-	Sol.SetSizeWordl(Hauteur);
+	Sol.SetSizeWordl(this->Size);
 	Sol.SetDataDir(this->Data_Dir);
 	Sol.Load();
 	AddEoliene();
@@ -116,7 +108,7 @@ void World::RemoveEoliene()
 
 void World::AddEoliene()
 {
-	double rayon = RandFloat(0.0,Largeur/2);
+	double rayon = RandFloat(0.0,this->Size/2);
 	double angle = RandFloat(0.0,360.0);
 	double X = 0 + rayon*cos(angle);
 	double Z = 0 + rayon*sin(angle);

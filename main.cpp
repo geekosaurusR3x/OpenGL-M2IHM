@@ -55,7 +55,7 @@ static void display(void)
 	glClear (GL_COLOR_BUFFER_BIT);
 	glClear (GL_DEPTH_BUFFER_BIT);
 
-	Camm.PositonCamera(Monde.GetLargeur()/2.0,-(Monde.GetProfondeur()/2.0));
+	Camm.PositonCamera(Monde.GetSize()/2.0,-(Monde.GetSize()/2.0));
 	Monde.Draw(Camm.GetFlecheX(),Camm.GetFlecheY(),Camm.GetFlecheZ());
 	
     glutSwapBuffers();

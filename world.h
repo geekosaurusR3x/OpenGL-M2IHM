@@ -27,9 +27,7 @@ public:
 	double GetWind() const;
 	void SetDebug(bool debug);
 	bool IsDebug() const;
-	double GetHauteur() const ;
-	double GetProfondeur() const ;
-	double GetLargeur() const;
+	double GetSize() const ;
 	void LoadWorld();
 	void RemoveEoliene();
 	void AddEoliene();
@@ -54,11 +52,8 @@ public:
 private:
 	bool debug;
 	double Wind;
-	int SpaceEolien;
 	int nbEoliene;
-	double Largeur;
-	double Profondeur;
-	double Hauteur;
+	double Size;
 	int Orientation_Wind;
 	bool fog;
 	std::string Data_Dir;

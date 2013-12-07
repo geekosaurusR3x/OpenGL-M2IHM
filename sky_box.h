@@ -5,39 +5,21 @@
 #define TEXTURE_SKYBOX_NAME_1 "clouds"
 #define TEXTURE_SKYBOX_NAME_2 "stars"
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
-
-#include <string>
-
+#include "object.h"
 #include "fonctions.h"
 
-class SkyBox
+class SkyBox : public Object
 {
 public:
 	SkyBox();
-	SkyBox(double larg,double haut,double pro);
+	SkyBox(double X,double Y,double Z,double size);
 	~SkyBox();
-	void LoadSkybox();
+	void Load();
 	void LoadTexture(int num);
 	void Draw();
-	void SetDebug(bool debug) {
-		this->debug = debug;
-	}
-
-	void SetDataDir(const std::string& Data_Dir) {
-		this->Data_Dir = Data_Dir;
-	}
 private:
 	GLuint texture_skybox[6];
-	bool debug;
-	double Largeur;
-	double Hauteur;
-	double Profondeur;
-	std::string Data_Dir;
+	double Size;
 };
 
 #endif // SKYBOX_H

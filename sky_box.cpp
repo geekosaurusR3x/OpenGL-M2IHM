@@ -3,23 +3,20 @@
 using namespace std;
 
 
-SkyBox::SkyBox()
+SkyBox::SkyBox():Object()
 {
 }
 
-SkyBox::SkyBox(double larg,double haut,double pro)
+SkyBox::SkyBox(double X,double Y,double Z,double size):Object(X,Y,Z)
 {
-	this->Largeur = larg;
-	this->Hauteur = haut;
-	this->Profondeur = pro;
-	this->Data_Dir	 = "";
+	this->Size = size;
 }
 
 SkyBox::~SkyBox()
 {
 }
 
-void SkyBox::LoadSkybox()
+void SkyBox::Load()
 {
 	glGenTextures(6, texture_skybox);	
 	LoadTexture(TEXTURE_SKYBOX_1);
@@ -63,57 +60,56 @@ void SkyBox::Draw()
 
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
    glColor3f(0,0,0);
-   double x = Largeur/2;
-   double y = Hauteur/2;
-   double z = Profondeur/2;
 	// Rendu de la skybox
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[0]); 
 	glBegin(GL_QUADS); //left
-		glTexCoord2f(0.0, 1.0); glVertex3f(-x, -y, z); 	
-		glTexCoord2f(1.0,1.0); glVertex3f(-x,-y,-z);
-		glTexCoord2f(1.0,0.0); glVertex3f(-x,y,-z);
-		glTexCoord2f(0.0,0.0); glVertex3f(-x,y,z);
+		glTexCoord2f(0.0, 1.0); glVertex3f(this->x, this->y, this->z); 	
+		glTexCoord2f(1.0,1.0); glVertex3f(x,y,z-this->Size);
+		glTexCoord2f(1.0,0.0); glVertex3f(x,y+this->Size,z-this->Size);
+		glTexCoord2f(0.0,0.0); glVertex3f(x,y+this->Size,z);
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[1]); 
 	glBegin(GL_QUADS);			// front
-		glTexCoord2f(0.0, 1.0); glVertex3f(-x,-y,-z);
-		glTexCoord2f(1.0, 1.0); glVertex3f(x,-y,-z);	
-		glTexCoord2f(1.0, 0.0); glVertex3f(x,y,-z); 
-		glTexCoord2f(0.0, 0.0); glVertex3f(-x,y,-z); 
+		glTexCoord2f(0.0, 1.0); glVertex3f(x,y,z-this->Size);
+		glTexCoord2f(1.0, 1.0); glVertex3f(x+this->Size,y,z-this->Size);	
+		glTexCoord2f(1.0, 0.0); glVertex3f(x+this->Size,y+this->Size,z-this->Size); 
+		glTexCoord2f(0.0, 0.0); glVertex3f(x,y+this->Size,z-this->Size); 
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[2]); 
-	glBegin(GL_QUADS);			// right 	
-		glTexCoord2f(1.0, 1.0); glVertex3f(x,-y,z);
-		glTexCoord2f(1.0, 0.0); glVertex3f(x,y,z); 
-		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,-z); 
-		glTexCoord2f(0.0, 1.0); glVertex3f(x,-y,-z);
+	glBegin(GL_QUADS);			// right
+		glTexCoord2f(1.0, 1.0); glVertex3f(x+this->Size,y,z);
+		glTexCoord2f(1.0, 0.0); glVertex3f(x+this->Size,y+this->Size,z);
+		glTexCoord2f(0.0, 0.0); glVertex3f(x+this->Size,y+this->Size,z-this->Size);  
+		glTexCoord2f(0.0, 1.0); glVertex3f(x+this->Size,y,z-this->Size);
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[3]); 
 	glBegin(GL_QUADS);			// back
-		glTexCoord2f(1.0, 1.0); glVertex3f(-x,-y,z); 
-		glTexCoord2f(1.0, 0.0); glVertex3f(-x,y,z);
-		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,z);
-		glTexCoord2f(0.0, 1.0); glVertex3f(x,-y,z);
+		glTexCoord2f(1.0, 1.0); glVertex3f(this->x, this->y, this->z);
+		glTexCoord2f(1.0, 0.0); glVertex3f(x,y+this->Size,z);
+		glTexCoord2f(0.0, 0.0); glVertex3f(x+this->Size,y+this->Size,z);
+		glTexCoord2f(0.0, 1.0); glVertex3f(x+this->Size,y,z);
+ 
+
 		
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[4]); 
 	glBegin(GL_QUADS);			// top		
-		glTexCoord2f(0.0, 0.0); glVertex3f(-x,y,z);
-		glTexCoord2f(0.0, 1.0); glVertex3f(-x,y,-z); 	
-		glTexCoord2f(1.0, 1.0); glVertex3f(x,y,-z); 
-		glTexCoord2f(1.0, 0.0); glVertex3f(x,y,z);
+		glTexCoord2f(0.0, 0.0); glVertex3f(x,y+this->Size,z);
+		glTexCoord2f(0.0, 1.0); glVertex3f(x,y+this->Size,z-this->Size); 	
+		glTexCoord2f(1.0, 1.0); glVertex3f(x+this->Size,y+this->Size,z-this->Size);
+		glTexCoord2f(1.0, 0.0); glVertex3f(x+this->Size,y+this->Size,z);
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[5]);  
 	glBegin(GL_QUADS);			// bottom	
-		glTexCoord2f(0.0, 0.0); glVertex3f(-x, -y, z); 
-		glTexCoord2f(0.0, 1.0); glVertex3f(x,-y,z); 
-		glTexCoord2f(1.0, 1.0); glVertex3f(x,-y,-z);
-		glTexCoord2f(1.0, 0.0); glVertex3f(-x,-y,-z);	
+		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,z); 
+		glTexCoord2f(1.0, 1.0); glVertex3f(x+this->Size,y,z);
+		glTexCoord2f(1.0, 0.0); glVertex3f(x+this->Size,y,z-this->Size);
+		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,z-this->Size);	
 	glEnd();
 	
 	glDepthMask(GL_TRUE);
