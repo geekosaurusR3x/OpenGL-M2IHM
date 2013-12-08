@@ -1,31 +1,32 @@
 #include "eolien.h"
 
-Eolien::Eolien(double x, double y, double z)
+Eolien::Eolien()
 {
-	posx = x;
-	posy = y;
-	posz = z;
-	pas = 0;
+	Eolien(0,0,0,1);
+}
+Eolien::Eolien(double X, double Y, double Z,double Zoom):Object(X,Y,Z,Zoom)
+{
+	this->pas = 0;
 }
 
 Eolien::~Eolien()
 {
 }
 
-void Eolien::Draw(double Wind, double OrientationVent)
+void Eolien::Draw()
 {
    //vitesse de rotation des pales
     double Periode = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     //orientation du vent
-    double Vitesse_Rotation = Periode * (double)Wind;
+    double Vitesse_Rotation = Periode * (double)this->Wind;
 
     GLUquadric* params = gluNewQuadric();
     gluQuadricDrawStyle(params,GLU_FILL);
     //couleur de l'éolienne
     glColor4dv(rougeFonce);
 	glPushMatrix();
-		glTranslated(posx,posy,posz);
-		glScalef(Zoom, Zoom, Zoom);
+		glTranslated(this->x,this->y,this->z);
+		glScalef(this->size, this->size, this->size);
 		glTranslated(0,2,0);
 		glPushMatrix();
 			//pied de l'eolienne
@@ -36,7 +37,7 @@ void Eolien::Draw(double Wind, double OrientationVent)
 
 			//tete de l'eolienne
 			glPushMatrix();
-				glRotated((double)OrientationVent,0,1,0);
+				glRotated((double)this->OrientationVent,0,1,0);
 				glPushMatrix();
 					glTranslated(0,0,0.19);
 					glutSolidTorus(0.075,0.075,15,15);

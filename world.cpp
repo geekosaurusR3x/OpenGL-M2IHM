@@ -1,6 +1,10 @@
 #include "world.h"
 using namespace std;
 
+World::World()
+{
+	World(512);
+}
 World::World(double size)
 {
 	this->Wind = 0;
@@ -17,6 +21,12 @@ World::~World()
 void World::SetWind(double Wind) {
 	if(debug){cout<<"Force du  vent : "<< Wind<<endl;}
 	this->Wind = Wind;
+	//Boucle mise a jour des eoliennes
+	for(size_t i=0;i<ListeEolien.size();++i)
+	{
+		ListeEolien[i].SetWind(this->Wind);
+	}
+	
 }
 double World::GetWind() const {
 	return Wind;
@@ -36,6 +46,11 @@ void  World::SetOrientationWind(int Orientation_Wind)
 {
 	this->Orientation_Wind = (this->Orientation_Wind+Orientation_Wind)%360;
 	if (debug){cout<<"Orientation du vent :"<<this->Orientation_Wind<<endl;}
+	//Boucle mise a jour des eoliennes
+	for(size_t i=0;i<ListeEolien.size();++i)
+	{
+		ListeEolien[i].SetOrientationVent(this->Orientation_Wind);
+	}
 }
 
 int World::GetOrientationWind() const
@@ -52,6 +67,7 @@ void World::LoadWorld()
 	Sky.SetDataDir(this->Data_Dir);
 	Sky.Load();
 	//Ajout du sol
+	Sol = Terran(-Demi_Size,-Demi_Size,Demi_Size,1);
 	Sol.SetDebug(debug);
 	Sol.SetSizeWordl(this->Size);
 	Sol.SetDataDir(this->Data_Dir);
@@ -116,8 +132,7 @@ void World::AddEoliene()
 	if(debug){
 		cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
 	}
-	ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z));
-	ListeEolien.back().SetZoom(Sol.GetMapScale());
+	ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
 
 }
 
@@ -132,7 +147,7 @@ void World::DrawObject(double camX,double camY,double camZ)
 	//Boucle affichages objects
 	for(size_t i=0;i<ListeEolien.size();++i)
 	{
-		ListeEolien[i].Draw(this->Wind,this->Orientation_Wind);
+		ListeEolien[i].Draw();
 	}
 }
 

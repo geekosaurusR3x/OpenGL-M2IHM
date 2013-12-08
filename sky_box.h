@@ -12,14 +12,13 @@ class SkyBox : public Object
 {
 public:
 	SkyBox();
-	SkyBox(double X,double Y,double Z,double size);
+	SkyBox(double X,double Y,double Z,double Size);
 	~SkyBox();
 	void Load();
 	void LoadTexture(int num);
 	void Draw();
 private:
 	GLuint texture_skybox[6];
-	double Size;
 };
 
 #endif // SKYBOX_H

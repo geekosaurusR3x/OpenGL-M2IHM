@@ -1,29 +1,26 @@
 #ifndef EOLIEN_H
 #define EOLIEN_H
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
-
+#include "object.h"
 #include "Couleur.h"
-class Eolien
+class Eolien : public Object
 {
 public:
-	Eolien(double x, double y, double z);
+	Eolien();
+	Eolien(double X, double Y, double Z, double Zoom);
 	~Eolien();
-	void Draw(double Wind,double OrientationVent);
-
-	void SetZoom(double Zoom) {
-		this->Zoom = 32.0;
+	void Draw();
+	void SetOrientationVent(double OrientationVent) {
+		this->OrientationVent = OrientationVent;
+	}
+	void SetWind(double Wind) {
+		this->Wind = Wind;
 	}
 private:
 	int pas;
-	double posx;
-	double posy;
-	double posz;
-	double Zoom;
+	double Wind;
+	double OrientationVent;
+
 };
 
 #endif // EOLIEN_H

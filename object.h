@@ -12,7 +12,7 @@ class Object
 {
 public:
 	Object();
-	Object(double X,double Y,double Z);
+	Object(double X,double Y,double Z,double Size);
 	virtual ~Object()=0;
 	virtual void Load();
 	virtual void Draw();
@@ -31,6 +31,7 @@ protected :
 	double x;
 	double y;
 	double z;
+	double size;
 	std::string Data_Dir;
 };
 

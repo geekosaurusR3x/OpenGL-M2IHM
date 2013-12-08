@@ -3,13 +3,14 @@
 Object::Object()
 {
 }
-Object::Object(double X, double Y, double Z)
+Object::Object(double X, double Y, double Z,double Size)
 {
 	this->x = X;
 	this->y = Y;
 	this->z = Z;
 	this->debug = false;
 	this->Data_Dir	 = "";
+	this->size = Size;
 }
 Object::~Object()
 {

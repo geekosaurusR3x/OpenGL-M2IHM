@@ -21,6 +21,7 @@
 class World
 {
 public:
+	World();
 	World(double size);
 	~World();
 	void SetWind(double Wind);
