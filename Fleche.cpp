@@ -1,19 +1,11 @@
 #include "Fleche.h"
-
-Fleche::Fleche(double x, double y, double z)
-{
-    this->posx = x;
-    this->posy = y;
-    this->posz = z;
-    this->Couleur = vertFonce;
-}
-
 Fleche::Fleche()
 {
-    this->posx = 1;
-    this->posy = -1;
-    this->posz = -6;
-    this->Couleur=vertFonce;
+	Fleche(1,-1,-6,1);
+}
+Fleche::Fleche(double x, double y, double z,double size):Object(x,y,z,size)
+{
+    this->Couleur = vertFonce;
 }
 
 Fleche::~Fleche()
@@ -21,15 +13,17 @@ Fleche::~Fleche()
     //dtor
 }
 
-void Fleche::Draw(double camX,double camY,double camZ,int OrientationVent)
+void Fleche::Draw()
 {
     GLUquadric* params = gluNewQuadric();
     gluQuadricDrawStyle(params,GLU_FILL);
-    glColor4dv(Couleur);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4dv(this->Couleur);
 
     glPushMatrix();
-        glTranslated(camX,camY,camZ);
-        glRotated(OrientationVent,0,1,0);
+        glTranslated(this->x,this->y,this->z);
+        glRotated(this->OrientationVent,0,1,0);
         glPushMatrix();
             gluCylinder(params,0.025,0.025,0.2,25,25);
             glPopMatrix();
@@ -41,4 +35,12 @@ void Fleche::Draw(double camX,double camY,double camZ,int OrientationVent)
             glPushMatrix();
         glPopMatrix();
     glPopMatrix();
+	glDisable(GL_BLEND);
+}
+
+void Fleche::Update()
+{
+	float alpha = this->ForceVent/240.0f;
+	if(alpha == 0.0){alpha = 0.1;}
+	this->Couleur[3]=alpha;
 }

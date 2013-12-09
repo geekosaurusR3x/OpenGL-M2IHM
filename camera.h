@@ -41,6 +41,10 @@ public:
 	double GetFlecheZ() const {
 		return flecheZ;
 	}
+	
+	void PositonCamera();
+	void Update();
+	
 private:
 	bool Rotate_Cam;
 	double angle_cam;

@@ -55,8 +55,8 @@ static void display(void)
 	glClear (GL_COLOR_BUFFER_BIT);
 	glClear (GL_DEPTH_BUFFER_BIT);
 
-	Camm.PositonCamera(Monde.GetSize()/2.0,-(Monde.GetSize()/2.0));
-	Monde.Draw(Camm.GetFlecheX(),Camm.GetFlecheY(),Camm.GetFlecheZ());
+	Camm.PositonCamera(0,0);
+	Monde.Draw();
 	
     glutSwapBuffers();
 }
@@ -119,7 +119,8 @@ void mouseButton(int button, int state, int x, int y)
 
 static void idle(void)
 {
-	Monde.Update();
+	Camm.Update();
+	Monde.Update(Camm.GetFlecheX(),Camm.GetFlecheY(),Camm.GetFlecheZ());
     glutPostRedisplay();
 }
 

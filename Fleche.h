@@ -1,26 +1,29 @@
 #ifndef FLECHE_H
 #define FLECHE_H
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
 
+#include "object.h"
 #include "Couleur.h"
 
-class Fleche
+
+class Fleche: public Object
 {
-    public:
-        Fleche(double x, double y, double z);
-        Fleche();
-        virtual ~Fleche();
-        void Draw(double camX,double camY,double camZ,int OrientationVent);
-    protected:
-    private:
-        double posx;
-        double posy;
-        double posz;
-        double* Couleur;
+public:
+	Fleche();
+	Fleche(double x, double y, double z,double size);
+	virtual ~Fleche();
+	void Draw();
+	void SetForceVent(int ForceVent) {
+		this->ForceVent = ForceVent;
+	}
+	void SetOrientationVent(int OrientationVent) {
+		this->OrientationVent = OrientationVent;
+	}
+	void Update();
+
+private:
+	double* Couleur;
+	int OrientationVent;
+	int ForceVent;
 };
 
 #endif // FLECHE_H

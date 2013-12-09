@@ -16,6 +16,18 @@ public:
 	virtual ~Object()=0;
 	virtual void Load();
 	virtual void Draw();
+	virtual void Update();
+
+
+	void SetX(double x) {
+		this->x = x;
+	}
+	void SetY(double y) {
+		this->y = y;
+	}
+	void SetZ(double z) {
+		this->z = z;
+	}
 	virtual void SetDebug(bool debug) {
 		this->debug = debug;
 	}

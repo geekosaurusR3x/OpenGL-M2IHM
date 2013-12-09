@@ -26,7 +26,7 @@ void Eolien::Draw()
     glColor4dv(rougeFonce);
 	glPushMatrix();
 		glTranslated(this->x,this->y,this->z);
-		glScalef(this->size, this->size, this->size);
+		glScalef(this->size+2, this->size+2, this->size+2);
 		glTranslated(0,2,0);
 		glPushMatrix();
 			//pied de l'eolienne

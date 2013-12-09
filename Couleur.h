@@ -26,5 +26,6 @@ static double blanc[] = { 1.0,1.0,1.0,1.0 };
  static double bleuCiel[] = { 0.5,0.5,1.0,1.0 };
  static double bleuMer[] = { 0.0,0.0,0.5,1.0 };
  static double bleuCielFonce[] = { 0.25,0.25,0.5,0.5 };
+ static float brouyardGris [] = {0.5f, 0.5f, 0.5f, 1.0f}; 
 
 #endif // COULEUR_H_INCLUDED

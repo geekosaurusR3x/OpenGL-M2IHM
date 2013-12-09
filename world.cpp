@@ -72,7 +72,7 @@ void World::LoadWorld()
 	Add(EOLIENNE);
 	Add(BUGDROID);
 	//Ajout de la fleche
-	Arrow = Fleche();
+	Arrow = Fleche(0,0,0,1);
 
 	InitFog();
 	
@@ -80,10 +80,9 @@ void World::LoadWorld()
 
 void World::InitFog()
 {
-	GLfloat fogColor[4]= {0.5f, 0.5f, 0.5f, 1.0f}; 
 	glFogi (GL_FOG_MODE, GL_LINEAR) ;
-	glFogfv(GL_FOG_COLOR,fogColor) ;
-	glFogf(GL_FOG_DENSITY, 0.35) ;
+	glFogfv(GL_FOG_COLOR,brouyardGris) ;
+	glFogf(GL_FOG_DENSITY, 0.05) ;
 	glFogf(GL_FOG_START, 512.0) ;
 	glFogf(GL_FOG_END, 1024.0) ;
 }
@@ -91,7 +90,7 @@ void World::InitFog()
 void World::FogOn()
 {
 	fog = true;
-	if (debug){cout<<"Changement etat brouillard : "<<fog <<endl;}
+	if (debug){cout<<"Changement etat 	brouillard : "<<fog <<endl;}
 }
 
 void World::FogOff()
@@ -104,14 +103,14 @@ void World::ChangeSkybox(int num)
 {
 	Sky.LoadTexture(num);
 }
-void World::Draw(double camX,double camY,double camZ)
+void World::Draw()
 {
 	if (fog){glEnable(GL_FOG);}else{glDisable(GL_FOG);}
-	this->DrawObject(camX,camY,camZ);
+	this->DrawObject();
 
 }
 
-void World::DrawObject(double camX,double camY,double camZ)
+void World::DrawObject()
 {
 	//Affichange de la skybox
 	Sky.Draw();
@@ -120,7 +119,7 @@ void World::DrawObject(double camX,double camY,double camZ)
 	//Affichage de l'eau
 	Sea.Draw();
 	//affichage de la fleche
-	Arrow.Draw(camX,camY,camZ,this->Orientation_Wind);
+	Arrow.Draw();
 	//Boucle affichages objects
 	for(size_t i=0;i<ListeEolien.size();++i)
 	{
@@ -141,7 +140,7 @@ void World::ChangeTextureMap(int num)
 
 void World::Add(int choice)
 {
-	double rayon = RandFloat(0.0,this->Size/2);
+	double rayon = RandFloat(0.0,(this->Size/2)-200);
 	double angle = RandFloat(0.0,360.0);
 	double X = 0 + rayon*cos(angle);
 	double Z = 0 + rayon*sin(angle);
@@ -190,8 +189,15 @@ void World::Remove(int choice)
 	}
 }
 
-void World::Update()
+void World::Update(double camX,double camY,double camZ)
 {
+	Arrow.SetX(camX);
+	Arrow.SetY(camY);
+	Arrow.SetZ(camZ);
+	Arrow.SetForceVent(this->Wind);
+	Arrow.SetOrientationVent(this->Orientation_Wind);
+	
+	Arrow.Update();
 	Sea.Update();
 	//Boucle mise a jour des eoliennes
 	for(size_t i=0;i<ListeEolien.size();++i)

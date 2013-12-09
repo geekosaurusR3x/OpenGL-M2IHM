@@ -36,7 +36,7 @@ public:
 	void LoadWorld();
 	void Add(int choice);
 	void Remove(int choice);
-	void Draw(double camX,double camY,double camZ);
+	void Draw();
 
 	void SetOrientationWind(int Orientation_Wind);
 	int GetOrientationWind() const;
@@ -46,7 +46,7 @@ public:
 	void ChangeSkybox (int num);
 	void ChangeTextureMap(int num);
 
-	void Update();
+	void Update(double camX,double camY,double camZ);
 	
 	void SetDataDir(const std::string& Data_Dir) {
 		this->Data_Dir = Data_Dir;
@@ -73,7 +73,7 @@ private:
 	Terran Sol;
 	Water Sea;
 	void InitFog();
-	void DrawObject(double camX,double camY,double camZ);
+	void DrawObject();
 };
 
 #endif // WORLD_H

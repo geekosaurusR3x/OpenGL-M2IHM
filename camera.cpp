@@ -15,22 +15,26 @@ MyCamera::~MyCamera()
 
 void MyCamera::PositonCamera(double xCentre, double zCentre)
 {
-  if (this->Rotate_Cam)
-  {
-    this->angle_cam += 0.01;
-    this->angle_cam = fmod(this->angle_cam,360.0);
-  }
   
-  this->camX = 0 + this->rayon_rotation*cos(this->angle_cam);
-  this->camZ = 0 + this->rayon_rotation*sin(this->angle_cam);
+  gluLookAt (this->camX,this->camY,this->camZ, xCentre,90.0,zCentre,0.0,1.0,0.0);
   
-  this->flecheX = 0 + (this->rayon_rotation-1.5)*cos(this->angle_cam);
-  this->flecheZ = 0 + (this->rayon_rotation-1.5)*sin(this->angle_cam);
-  
-  gluLookAt (this->camX,this->camY,this->camZ, 0,90.0,0,0.0,1.0,0.0);
 }
 
 void MyCamera::TogleRotate()
 {
   this->Rotate_Cam=!this->Rotate_Cam;
+}
+
+void MyCamera::Update()
+{
+   if (this->Rotate_Cam)
+  {
+    this->angle_cam += 0.01;
+    this->angle_cam = fmod(this->angle_cam,360.0);
+  }
+  this->camX = 0 + this->rayon_rotation*cos(this->angle_cam);
+  this->camZ = 0 + this->rayon_rotation*sin(this->angle_cam);
+  
+  this->flecheX = 0 + (this->rayon_rotation-1.5)*cos(this->angle_cam);
+  this->flecheZ = 0 + (this->rayon_rotation-1.5)*sin(this->angle_cam);
 }

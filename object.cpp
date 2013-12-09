@@ -26,3 +26,6 @@ void Object::Load()
 {
 }
 
+void Object::Update()
+{
+}
