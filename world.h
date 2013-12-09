@@ -14,6 +14,7 @@
 #include "Couleur.h"
 #include "Fleche.h"
 #include "terran.h"
+#include "water.h"
 #include "fonctions.h"
 #include "bug_droid.h"
 
@@ -45,6 +46,8 @@ public:
 	void ChangeSkybox (int num);
 	void ChangeTextureMap(int num);
 
+	void Update();
+	
 	void SetDataDir(const std::string& Data_Dir) {
 		this->Data_Dir = Data_Dir;
 	}
@@ -68,7 +71,7 @@ private:
 	Fleche Arrow;
 	SkyBox Sky;
 	Terran Sol;
-	BugDroid Droid;
+	Water Sea;
 	void InitFog();
 	void DrawObject(double camX,double camY,double camZ);
 };

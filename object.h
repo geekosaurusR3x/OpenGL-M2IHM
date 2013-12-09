@@ -16,7 +16,6 @@ public:
 	virtual ~Object()=0;
 	virtual void Load();
 	virtual void Draw();
-
 	virtual void SetDebug(bool debug) {
 		this->debug = debug;
 	}
@@ -25,6 +24,10 @@ public:
 		this->Data_Dir = Data_Dir;
 	}
 
+
+	double GetSize() const {
+		return size;
+	}
 protected :
 	bool debug;
 	double x;

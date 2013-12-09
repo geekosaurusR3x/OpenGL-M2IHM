@@ -22,6 +22,7 @@ unsigned char * loadJpegImage(std::string fichie, jpeg_decompress_struct *cinfo)
 
 void loadJpegTexture(std::string fichie, int numtext);
 void setTexture(unsigned char *image,int width,int height,int numtext);
+void setTextureAlpha(unsigned char *image,int width,int height,int numtext);
 
 float RandFloat(float start, float end);
 

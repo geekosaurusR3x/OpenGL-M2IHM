@@ -128,6 +128,7 @@ void Terran::LoadModelMap()
 				terrain[x][z][1] = (double)GetColorPixel(map,x,z,0);
 				terrain[x][z][2] = -(double(z)*Map_Scale)+this->z;
 			}
+
 		}
 	}
 	catch (const jpeg_load_exception &e)

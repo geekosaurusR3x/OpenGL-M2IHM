@@ -1,5 +1,7 @@
 #include "object.h"
 
+using namespace std;
+
 Object::Object()
 {
 }
@@ -23,3 +25,4 @@ void Object::Draw()
 void Object::Load()
 {
 }
+

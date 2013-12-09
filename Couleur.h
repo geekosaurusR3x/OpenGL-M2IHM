@@ -24,6 +24,7 @@ static double blanc[] = { 1.0,1.0,1.0,1.0 };
  static double rose[] = { 1.0,0.65,0.65,1.0 };
  static double roseFonce[] = { 0.6,0.25,0.25,1.0 };
  static double bleuCiel[] = { 0.5,0.5,1.0,1.0 };
- static double bleuCielFonce[] = { 0.25,0.25,0.5,1.0 };
+ static double bleuMer[] = { 0.0,0.0,0.5,1.0 };
+ static double bleuCielFonce[] = { 0.25,0.25,0.5,0.5 };
 
 #endif // COULEUR_H_INCLUDED

@@ -91,8 +91,8 @@ void BugDroid::Draw()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, positions);
-	glColor4dv(vert);
 	glPushMatrix();
+		glColor4dv(vert);
 		glTranslated(this->x,this->y,this->z);
 		glScalef(this->size/4, this->size/4, this->size/4);
 		glTranslated(0,3,0);

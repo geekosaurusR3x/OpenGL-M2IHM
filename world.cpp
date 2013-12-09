@@ -22,12 +22,6 @@ World::~World()
 void World::SetWind(double Wind) {
 	if(debug){cout<<"Force du  vent : "<< Wind<<endl;}
 	this->Wind = Wind;
-	//Boucle mise a jour des eoliennes
-	for(size_t i=0;i<ListeEolien.size();++i)
-	{
-		ListeEolien[i].SetWind(this->Wind);
-	}
-	
 }
 double World::GetWind() const {
 	return Wind;
@@ -47,11 +41,6 @@ void  World::SetOrientationWind(int Orientation_Wind)
 {
 	this->Orientation_Wind = (this->Orientation_Wind+Orientation_Wind)%360;
 	if (debug){cout<<"Orientation du vent :"<<this->Orientation_Wind<<endl;}
-	//Boucle mise a jour des eoliennes
-	for(size_t i=0;i<ListeEolien.size();++i)
-	{
-		ListeEolien[i].SetOrientationVent(this->Orientation_Wind);
-	}
 }
 
 int World::GetOrientationWind() const
@@ -73,6 +62,12 @@ void World::LoadWorld()
 	Sol.SetSizeWordl(this->Size);
 	Sol.SetDataDir(this->Data_Dir);
 	Sol.Load();
+	//Ajout de l'eau
+	Sea = Water(-Demi_Size,60,Demi_Size,this->Sol.GetSize());
+	Sea.SetDebug(debug);
+	Sea.SetDataDir(this->Data_Dir);
+	Sea.SetSizeWordl(this->Size);
+	Sea.Load();
 	//ajout de differant object;
 	Add(EOLIENNE);
 	Add(BUGDROID);
@@ -122,6 +117,8 @@ void World::DrawObject(double camX,double camY,double camZ)
 	Sky.Draw();
 	//Affichange du sol
 	Sol.Draw();
+	//Affichage de l'eau
+	Sea.Draw();
 	//affichage de la fleche
 	Arrow.Draw(camX,camY,camZ,this->Orientation_Wind);
 	//Boucle affichages objects
@@ -133,8 +130,7 @@ void World::DrawObject(double camX,double camY,double camZ)
 	{
 		ListeBug[i].Draw();
 	}
-	//affichage du model
-	Droid.Draw();
+	
 }
 
 void World::ChangeTextureMap(int num)
@@ -164,7 +160,7 @@ void World::Add(int choice)
 				cout<<"Ajout d'un BugDroid en X: "<<X<<" Z: "<<Z<<endl;
 			}
 			ListeBug.push_back(BugDroid(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()+10));
-			ListeBug.back().SetDebug(debug);
+			ListeBug.back().SetDebug(false);
 			ListeBug.back().SetDataDir(this->Data_Dir);
 			ListeBug.back().Load();
 			break;
@@ -191,5 +187,16 @@ void World::Remove(int choice)
 				if(debug){cout<<"Suppression du dernier BugDroid"<<endl;}
 			}
 			break;
+	}
+}
+
+void World::Update()
+{
+	Sea.Update();
+	//Boucle mise a jour des eoliennes
+	for(size_t i=0;i<ListeEolien.size();++i)
+	{
+		ListeEolien[i].SetOrientationVent(this->Orientation_Wind);
+		ListeEolien[i].SetWind(this->Wind);
 	}
 }
