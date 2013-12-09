@@ -127,11 +127,13 @@ void WindChange(int choice)
 	Monde.SetWind(choice);
 }
 
-void EolieneMenu(int choice)
+void AddSuppMenu(int choice)
 {
 	switch(choice) {
-    case 1 : Monde.AddEoliene();break;
-	case 2 : Monde.RemoveEoliene();break;
+    case 1 : Monde.Add(EOLIENNE);break;
+	case 2 : Monde.Remove(EOLIENNE);break;
+    case 3 : Monde.Add(BUGDROID);break;
+	case 4 : Monde.Remove(BUGDROID);break;
 	}
 }
 
@@ -229,9 +231,13 @@ int main(int argc, char *argv[])
 		glutAddMenuEntry("Moyen",160);
 		glutAddMenuEntry("Rapide",240);
 
-	int EolMenu = glutCreateMenu(EolieneMenu);
+	int EolMenu = glutCreateMenu(AddSuppMenu);
 		glutAddMenuEntry("Ajouter Eolienne",1);
 		glutAddMenuEntry("Supprimer Eolienne",2);
+
+	int BugMenu = glutCreateMenu(AddSuppMenu);
+		glutAddMenuEntry("Ajouter BugDroid",3);
+		glutAddMenuEntry("Supprimer BugDroid",4);
 		
 	int SkyMenu = glutCreateMenu(SkyBoxMenu);
 		glutAddMenuEntry(TEXTURE_SKYBOX_NAME_1,TEXTURE_SKYBOX_1);
@@ -248,6 +254,7 @@ int main(int argc, char *argv[])
 	glutCreateMenu(SelectChoice);
 		glutAddSubMenu("Force du vent",WindMenu);
 		glutAddSubMenu("Eoliennes",EolMenu);
+		glutAddSubMenu("BugDroid",BugMenu);
 		glutAddSubMenu("Changer Skybox",SkyMenu);
 		glutAddSubMenu("Brouyard",FogMenu);
 		glutAddSubMenu("Sol",MapMenu);

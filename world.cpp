@@ -74,8 +74,8 @@ void World::LoadWorld()
 	Sol.SetDataDir(this->Data_Dir);
 	Sol.Load();
 	//ajout de differant object;
-	AddEoliene();
-	AddBug();
+	Add(EOLIENNE);
+	Add(BUGDROID);
 	//Ajout de la fleche
 	Arrow = Fleche();
 
@@ -116,57 +116,6 @@ void World::Draw(double camX,double camY,double camZ)
 
 }
 
-void World::RemoveEoliene()
-{
-	if(nbEoliene >0)
-	{
-		ListeEolien.pop_back();
-		nbEoliene--;
-		if(debug){cout<<"Suppression de la derniere eolienne"<<endl;}
-	}
-}
-
-void World::RemoveBug()
-{
-	if(nbBug >0)
-	{
-		ListeEolien.pop_back();
-		nbBug--;
-		if(debug){cout<<"Suppression du dernier BugDroid"<<endl;}
-	}
-}
-
-void World::AddEoliene()
-{
-	double rayon = RandFloat(0.0,this->Size/2);
-	double angle = RandFloat(0.0,360.0);
-	double X = 0 + rayon*cos(angle);
-	double Z = 0 + rayon*sin(angle);
-	nbEoliene++;
-	if(debug){
-		cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
-	}
-	ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
-
-}
-
-void World::AddBug()
-{
-	double rayon = RandFloat(0.0,this->Size/2);
-	double angle = RandFloat(0.0,360.0);
-	double X = 0 + rayon*cos(angle);
-	double Z = 0 + rayon*sin(angle);
-	nbBug++;
-	if(debug){
-		cout<<"Ajout d'un BugDroid en X: "<<X<<" Z: "<<Z<<endl;
-	}
-	ListeBug.push_back(BugDroid(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()+10));
-	ListeBug.back().SetDebug(debug);
-	ListeBug.back().SetDataDir(this->Data_Dir);
-	ListeBug.back().Load();
-
-}
-
 void World::DrawObject(double camX,double camY,double camZ)
 {
 	//Affichange de la skybox
@@ -192,4 +141,55 @@ void World::ChangeTextureMap(int num)
 {
 	Sol.TextureNice();
 	if(num == 0){Sol.TexureCrapy();}
+}
+
+void World::Add(int choice)
+{
+	double rayon = RandFloat(0.0,this->Size/2);
+	double angle = RandFloat(0.0,360.0);
+	double X = 0 + rayon*cos(angle);
+	double Z = 0 + rayon*sin(angle);
+	switch(choice)
+	{
+		case EOLIENNE:
+			nbEoliene++;
+			if(debug){
+				cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
+			}
+			ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
+			break;
+		case BUGDROID:
+			nbBug++;
+			if(debug){
+				cout<<"Ajout d'un BugDroid en X: "<<X<<" Z: "<<Z<<endl;
+			}
+			ListeBug.push_back(BugDroid(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()+10));
+			ListeBug.back().SetDebug(debug);
+			ListeBug.back().SetDataDir(this->Data_Dir);
+			ListeBug.back().Load();
+			break;
+	}
+}
+
+void World::Remove(int choice)
+{
+	switch(choice)
+	{
+		case EOLIENNE:
+			if(nbEoliene >0)
+			{
+				ListeEolien.pop_back();
+				nbEoliene--;
+				if(debug){cout<<"Suppression de la derniere eolienne"<<endl;}
+			}
+			break;
+		case BUGDROID:
+			if(nbBug >0)
+			{
+				ListeBug.pop_back();
+				nbBug--;
+				if(debug){cout<<"Suppression du dernier BugDroid"<<endl;}
+			}
+			break;
+	}
 }

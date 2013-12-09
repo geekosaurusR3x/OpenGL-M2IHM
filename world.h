@@ -1,5 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
+#define EOLIENNE 1
+#define BUGDROID 2
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -31,10 +33,8 @@ public:
 	bool IsDebug() const;
 	double GetSize() const ;
 	void LoadWorld();
-	void RemoveEoliene();
-	void AddEoliene();
-	void RemoveBug();
-	void AddBug();
+	void Add(int choice);
+	void Remove(int choice);
 	void Draw(double camX,double camY,double camZ);
 
 	void SetOrientationWind(int Orientation_Wind);
