@@ -13,6 +13,7 @@
 #include "Fleche.h"
 #include "terran.h"
 #include "fonctions.h"
+#include "bug_droid.h"
 
 #include <string>
 #include <vector>
@@ -32,7 +33,8 @@ public:
 	void LoadWorld();
 	void RemoveEoliene();
 	void AddEoliene();
-
+	void RemoveBug();
+	void AddBug();
 	void Draw(double camX,double camY,double camZ);
 
 	void SetOrientationWind(int Orientation_Wind);
@@ -54,16 +56,19 @@ private:
 	bool debug;
 	double Wind;
 	int nbEoliene;
+	int nbBug;
 	double Size;
 	int Orientation_Wind;
 	bool fog;
 	std::string Data_Dir;
 
 	std::vector<Eolien> ListeEolien;
+	std::vector<BugDroid> ListeBug;
 
 	Fleche Arrow;
 	SkyBox Sky;
 	Terran Sol;
+	BugDroid Droid;
 	void InitFog();
 	void DrawObject(double camX,double camY,double camZ);
 };

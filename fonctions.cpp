@@ -68,7 +68,33 @@ float RandFloat(float start, float end) {
     return start + result;
 }
 
-void extractOBJdata(std::string file, float positions[][3], float texels[][2], float normals[][3], int faces[][9])
+void GetModel3DInfo(std::string file,int &positions, int &texels, int &normals, int &faces, int &vertices)
+{
+    ifstream Model3D(file.c_str(),ios::in);
+	if (!Model3D)
+	{
+       throw jpeg_load_exception(file.c_str(),"No sutch file or directory");
+	}
+  
+	string line;
+
+    while(getline(Model3D, line))
+	{
+        string type = line.substr(0,2);
+        if(type.compare("v ") == 0)
+            positions++;
+        else if(type.compare("vt") == 0)
+            texels++;
+        else if(type.compare("vn") == 0)
+            normals++;
+        else if(type.compare("f ") == 0)
+            faces++;
+    }
+	vertices = faces*3;
+    Model3D.close();
+}
+
+void LoadModel3D(std::string file, float *positions, float *texels, float *normals, short *faces)
 {
     // Counters
     int p = 0;
@@ -76,18 +102,14 @@ void extractOBJdata(std::string file, float positions[][3], float texels[][2], f
     int n = 0;
     int f = 0;
  
-
-    // Open OBJ file
-    ifstream inOBJ(file.c_str(),ios::in);
-	if (!inOBJ)
+    ifstream Model3D(file.c_str(),ios::in);
+	if (!Model3D)
 	{
        throw jpeg_load_exception(file.c_str(),"No sutch file or directory");
 	}
   
-	
 	string line;
-    // Read OBJ file
-    while(getline(inOBJ, line))
+    while(getline(Model3D, line))
     {
 
         string type = line.substr(0,2);
@@ -95,36 +117,64 @@ void extractOBJdata(std::string file, float positions[][3], float texels[][2], f
 		// Positions
 		if(type.compare("v ") == 0)
 		{
-		 
-			// 2
-			// Extract tokens
-			int i = 0;
 			stringstream stream(line);
 			string val;
+			//elimination du type 
+			getline(stream, val, ' ');
+			//recuperation des valeurs
 			while( getline(stream, val, ' ') )
 			{
-				positions[p][i] = atof( val.c_str() );
-				i++;
+				positions[p] = atof( val.c_str() );
+				p++;
 			}
-			p++;
 		}
  
         // Texels
         else if(type.compare("vt") == 0)
         {
+			int i = 0;
+			stringstream stream(line);
+			string val;
+			//elimination du type 
+			getline(stream, val, ' ');
+			//recuperation des valeurs
+			while( getline(stream, val, ' ') )
+			{
+				texels[t] = atof( val.c_str() );
+				t++;
+			}
         }
  
         // Normals
         else if(type.compare("vn") == 0)
         {
+			int i = 0;
+			stringstream stream(line);
+			string val;
+			//elimination du type 
+			getline(stream, val, ' ');
+			//recuperation des valeurs
+			while( getline(stream, val, ' ') )
+			{
+				normals[n] = atof( val.c_str() );
+				n++;
+			}
         }
  
         // Faces
         else if(type.compare("f ") == 0)
         {
+			stringstream stream(line);
+			string val;
+			//elimination du type 
+			getline(stream, val, ' ');
+			//recuperation des valeurs
+			while( getline(stream, val, ' ') )
+			{
+				faces[f] = atof( val.c_str() )-1;
+				f++;
+			}
         }
     }
- 
-    // Close OBJ file
-    inOBJ.close();
+    Model3D.close();
 }

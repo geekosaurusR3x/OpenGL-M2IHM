@@ -24,5 +24,7 @@ void loadJpegTexture(std::string fichie, int numtext);
 void setTexture(unsigned char *image,int width,int height,int numtext);
 
 float RandFloat(float start, float end);
-void extractOBJdata(std::string file, float positions[][3], float texels[][2], float normals[][3], int faces[][9]);
+
+void GetModel3DInfo(std::string file,int &positions, int &texels, int &normals, int &faces, int &vertices);
+void LoadModel3D(std::string file, float *positions, float *texels, float *normals, short *faces);
 #endif // FONCTIONS_H

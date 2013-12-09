@@ -26,7 +26,6 @@ public:
 	}
 
 protected :
-	GLuint texture_skybox[];
 	bool debug;
 	double x;
 	double y;

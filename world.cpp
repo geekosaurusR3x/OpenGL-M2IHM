@@ -9,6 +9,7 @@ World::World(double size)
 {
 	this->Wind = 0;
 	this->nbEoliene = 0;
+	this->nbBug = 0;
 	this->Size = size;
 	this->Orientation_Wind = 0;
 	this->fog = true;
@@ -72,11 +73,14 @@ void World::LoadWorld()
 	Sol.SetSizeWordl(this->Size);
 	Sol.SetDataDir(this->Data_Dir);
 	Sol.Load();
+	//ajout de differant object;
 	AddEoliene();
+	AddBug();
 	//Ajout de la fleche
 	Arrow = Fleche();
 
 	InitFog();
+	
 }
 
 void World::InitFog()
@@ -122,6 +126,16 @@ void World::RemoveEoliene()
 	}
 }
 
+void World::RemoveBug()
+{
+	if(nbBug >0)
+	{
+		ListeEolien.pop_back();
+		nbBug--;
+		if(debug){cout<<"Suppression du dernier BugDroid"<<endl;}
+	}
+}
+
 void World::AddEoliene()
 {
 	double rayon = RandFloat(0.0,this->Size/2);
@@ -133,6 +147,23 @@ void World::AddEoliene()
 		cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
 	}
 	ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
+
+}
+
+void World::AddBug()
+{
+	double rayon = RandFloat(0.0,this->Size/2);
+	double angle = RandFloat(0.0,360.0);
+	double X = 0 + rayon*cos(angle);
+	double Z = 0 + rayon*sin(angle);
+	nbBug++;
+	if(debug){
+		cout<<"Ajout d'un BugDroid en X: "<<X<<" Z: "<<Z<<endl;
+	}
+	ListeBug.push_back(BugDroid(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()+10));
+	ListeBug.back().SetDebug(debug);
+	ListeBug.back().SetDataDir(this->Data_Dir);
+	ListeBug.back().Load();
 
 }
 
@@ -149,6 +180,12 @@ void World::DrawObject(double camX,double camY,double camZ)
 	{
 		ListeEolien[i].Draw();
 	}
+	for(size_t i=0;i<ListeBug.size();++i)
+	{
+		ListeBug[i].Draw();
+	}
+	//affichage du model
+	Droid.Draw();
 }
 
 void World::ChangeTextureMap(int num)
