@@ -6,6 +6,7 @@ Eolien::Eolien()
 }
 Eolien::Eolien(double X, double Y, double Z,double Zoom):Object(X,Y,Z,Zoom)
 {
+	this->color = rougeFonce;
 	this->pas = 0;
 }
 
@@ -23,7 +24,7 @@ void Eolien::Draw()
     GLUquadric* params = gluNewQuadric();
     gluQuadricDrawStyle(params,GLU_FILL);
     //couleur de l'éolienne
-    glColor4dv(rougeFonce);
+    glColor4dv(this->color);
 	glPushMatrix();
 		glTranslated(this->x,this->y,this->z);
 		glScalef(this->size+2, this->size+2, this->size+2);
@@ -80,3 +81,14 @@ void Eolien::Draw()
 	glPopMatrix();
 }
 
+void Eolien::SetColor(int color)
+{
+	switch(color)
+	{
+		case EOLIEN_COULEUR_1:  this->color = rougeFonce;break;
+        case EOLIEN_COULEUR_2 : this->color = grisClair ;break;
+        case EOLIEN_COULEUR_3 : this->color = blanc ;break;
+        case EOLIEN_COULEUR_4 : this->color = magenta ;break;
+			
+	}
+}

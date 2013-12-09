@@ -1,6 +1,11 @@
 #ifndef EOLIEN_H
 #define EOLIEN_H
 
+#define EOLIEN_COULEUR_1 1
+#define EOLIEN_COULEUR_2 2
+#define EOLIEN_COULEUR_3 3
+#define EOLIEN_COULEUR_4 4
+
 #include "object.h"
 #include "Couleur.h"
 class Eolien : public Object
@@ -16,10 +21,14 @@ public:
 	void SetWind(double Wind) {
 		this->Wind = Wind;
 	}
+	
+	void SetColor(int color);
+	
 private:
 	int pas;
 	double Wind;
 	double OrientationVent;
+	double* color;
 
 };
 

@@ -206,3 +206,11 @@ void World::Update(double camX,double camY,double camZ)
 		ListeEolien[i].SetWind(this->Wind);
 	}
 }
+
+void World::ChangerColorEolienne(int num)
+{
+	for(size_t i=0;i<ListeEolien.size();++i)
+	{
+		ListeEolien[i].SetColor(num);
+	}
+}

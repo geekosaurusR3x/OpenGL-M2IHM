@@ -45,7 +45,7 @@ public:
 	void FogOff();
 	void ChangeSkybox (int num);
 	void ChangeTextureMap(int num);
-
+	void ChangerColorEolienne(int num);
 	void Update(double camX,double camY,double camZ);
 	
 	void SetDataDir(const std::string& Data_Dir) {

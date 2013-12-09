@@ -15,6 +15,7 @@
 #include <getopt.h>
 #include "world.h"
 #include "sky_box.h"
+#include "eolien.h"
 #include "camera.h"
 
 //fin des includes 
@@ -157,6 +158,10 @@ void TextureMapMenu(int choice)
 	Monde.ChangeTextureMap(choice);
 }
 
+void EolColorMenu(int choice)
+{
+	Monde.ChangerColorEolienne(choice);
+}
 
 void SelectChoice(int choice)
 {
@@ -233,11 +238,21 @@ int main(int argc, char *argv[])
 		glutAddMenuEntry("Moyen",160);
 		glutAddMenuEntry("Rapide",240);
 
-	int EolMenu = glutCreateMenu(AddSuppMenu);
+	int EolASMenu = glutCreateMenu(AddSuppMenu);
 		glutAddMenuEntry("Ajouter Eolienne",1);
 		glutAddMenuEntry("Supprimer Eolienne",2);
+		
+	int EolColMenu = glutCreateMenu(EolColorMenu);
+		glutAddMenuEntry("Rouge Foncee",EOLIEN_COULEUR_1);
+		glutAddMenuEntry("Gris",EOLIEN_COULEUR_2);
+		glutAddMenuEntry("Blanc",EOLIEN_COULEUR_3);
+		glutAddMenuEntry("Magenta",EOLIEN_COULEUR_4);
 
-	int BugMenu = glutCreateMenu(AddSuppMenu);
+	int EolMenu = glutCreateMenu(AddSuppMenu);
+		glutAddSubMenu("Ajouter / Supprimer",EolASMenu);
+		glutAddSubMenu("Couleur",EolColMenu);
+		
+	int BugASMenu = glutCreateMenu(AddSuppMenu);
 		glutAddMenuEntry("Ajouter BugDroid",3);
 		glutAddMenuEntry("Supprimer BugDroid",4);
 		
@@ -256,7 +271,7 @@ int main(int argc, char *argv[])
 	glutCreateMenu(SelectChoice);
 		glutAddSubMenu("Force du vent",WindMenu);
 		glutAddSubMenu("Eoliennes",EolMenu);
-		glutAddSubMenu("BugDroid",BugMenu);
+		glutAddSubMenu("BugDroid",BugASMenu);
 		glutAddSubMenu("Changer Skybox",SkyMenu);
 		glutAddSubMenu("Brouyard",FogMenu);
 		glutAddSubMenu("Sol",MapMenu);
