@@ -6,6 +6,7 @@
 #include <GL/glut.h>
 #endif
 
+#include "fonctions.h"
 #include <string>
 
 class Object
@@ -15,8 +16,11 @@ public:
 	Object(double X,double Y,double Z,double Size);
 	virtual ~Object()=0;
 	virtual void Load();
+	virtual void LoadChild();
 	virtual void Draw();
+	virtual void DrawChild();
 	virtual void Update();
+	void LoadTextureObject(std::string name, int num);
 
 
 	void SetX(double x) {
@@ -42,11 +46,15 @@ public:
 	}
 protected :
 	bool debug;
+	bool display_list;
 	double x;
 	double y;
 	double z;
 	double size;
+	int nbtexture;
 	std::string Data_Dir;
+	GLuint *id_texture;
+	GLuint id_display_list;
 	
 };
 

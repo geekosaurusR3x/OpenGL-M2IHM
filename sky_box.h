@@ -6,7 +6,6 @@
 #define TEXTURE_SKYBOX_NAME_2 "stars"
 
 #include "object.h"
-#include "fonctions.h"
 
 class SkyBox : public Object
 {
@@ -14,13 +13,11 @@ public:
 	SkyBox();
 	SkyBox(double X,double Y,double Z,double Size);
 	~SkyBox();
-	void Load();
+	void LoadChild();
 	void LoadTexture(int num);
-	void Draw();
-	void GenDisplayList();
+	void DrawChild();
 private:
-	GLuint texture_skybox[6];
-	GLuint display_list;
+
 };
 
 #endif // SKYBOX_H

@@ -9,18 +9,19 @@ SkyBox::SkyBox():Object()
 
 SkyBox::SkyBox(double X,double Y,double Z,double Size):Object(X,Y,Z,Size)
 {
+	nbtexture = 6;
+	display_list = true;
 }
 
 SkyBox::~SkyBox()
 {
 }
 
-void SkyBox::Load()
+void SkyBox::LoadChild()
 {
-	glGenTextures(6, texture_skybox);	
 	LoadTexture(TEXTURE_SKYBOX_1);
-	GenDisplayList();
 }
+
 void SkyBox::LoadTexture(int num)
 {
 	string name;
@@ -34,29 +35,17 @@ void SkyBox::LoadTexture(int num)
 	}
 
 	if (debug){cout<<"Chargement Texture Skybox : "<<name<<" Numero :"<<num <<endl;}
-	try
-	{
-	
-		loadJpegTexture(Data_Dir+"/Textures/"+name+"_left.jpg",texture_skybox[0]); //left
-		loadJpegTexture(Data_Dir+"/Textures/"+name+"_front.jpg",texture_skybox[1]); //front
-		loadJpegTexture(Data_Dir+"/Textures/"+name+"_right.jpg",texture_skybox[2]); //right
-		loadJpegTexture(Data_Dir+"/Textures/"+name+"_back.jpg",texture_skybox[3]); //back
-		loadJpegTexture(Data_Dir+"/Textures/"+name+"_top.jpg",texture_skybox[4]); //top
-		loadJpegTexture(Data_Dir+"/Textures/"+name+"_bottom.jpg",texture_skybox[5]); //bottom
-	}
-	catch (const jpeg_load_exception &e)
-	{
-		if (debug){cout<<e.what()<<endl;}
-	}
-	
 
+	LoadTextureObject(name+"_left",0); //left
+	LoadTextureObject(name+"_front",1); //front
+	LoadTextureObject(name+"_right",2); //right
+	LoadTextureObject(name+"_back",3); //back
+	LoadTextureObject(name+"_top",4); //top
+	LoadTextureObject(name+"_bottom",5); //bottom
 }
 
-void SkyBox::GenDisplayList()
+void SkyBox::DrawChild()
 {
-	
-	display_list = glGenLists(1);
-	glNewList(display_list, GL_COMPILE);
 		glEnable(GL_TEXTURE_2D); 
 		glDisable(GL_LIGHTING);
 		glDepthMask(GL_FALSE);
@@ -64,7 +53,7 @@ void SkyBox::GenDisplayList()
 	   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	   glColor3f(0,0,0);
 		// Rendu de la skybox
-		glBindTexture(GL_TEXTURE_2D, texture_skybox[0]); 
+		glBindTexture(GL_TEXTURE_2D, id_texture[0]); 
 		glBegin(GL_QUADS); //left
 			glTexCoord2f(0.0, 1.0); glVertex3f(this->x, this->y, this->z); 	
 			glTexCoord2f(1.0,1.0); glVertex3f(x,y,z-this->size);
@@ -72,7 +61,7 @@ void SkyBox::GenDisplayList()
 			glTexCoord2f(0.0,0.0); glVertex3f(x,y+this->size,z);
 		glEnd();
 		
-		glBindTexture(GL_TEXTURE_2D, texture_skybox[1]); 
+		glBindTexture(GL_TEXTURE_2D, id_texture[1]); 
 		glBegin(GL_QUADS);			// front
 			glTexCoord2f(0.0, 1.0); glVertex3f(x,y,z-this->size);
 			glTexCoord2f(1.0, 1.0); glVertex3f(x+this->size,y,z-this->size);	
@@ -80,7 +69,7 @@ void SkyBox::GenDisplayList()
 			glTexCoord2f(0.0, 0.0); glVertex3f(x,y+this->size,z-this->size); 
 		glEnd();
 		
-		glBindTexture(GL_TEXTURE_2D, texture_skybox[2]); 
+		glBindTexture(GL_TEXTURE_2D, id_texture[2]); 
 		glBegin(GL_QUADS);			// right
 			glTexCoord2f(1.0, 1.0); glVertex3f(x+this->size,y,z);
 			glTexCoord2f(1.0, 0.0); glVertex3f(x+this->size,y+this->size,z);
@@ -88,7 +77,7 @@ void SkyBox::GenDisplayList()
 			glTexCoord2f(0.0, 1.0); glVertex3f(x+this->size,y,z-this->size);
 		glEnd();
 		
-		glBindTexture(GL_TEXTURE_2D, texture_skybox[3]); 
+		glBindTexture(GL_TEXTURE_2D, id_texture[3]); 
 		glBegin(GL_QUADS);			// back
 			glTexCoord2f(1.0, 1.0); glVertex3f(this->x, this->y, this->z);
 			glTexCoord2f(1.0, 0.0); glVertex3f(x,y+this->size,z);
@@ -96,7 +85,7 @@ void SkyBox::GenDisplayList()
 			glTexCoord2f(0.0, 1.0); glVertex3f(x+this->size,y,z);
 		glEnd();
 		
-		glBindTexture(GL_TEXTURE_2D, texture_skybox[4]); 
+		glBindTexture(GL_TEXTURE_2D, id_texture[4]); 
 		glBegin(GL_QUADS);			// top		
 			glTexCoord2f(0.0, 0.0); glVertex3f(x,y+this->size,z);
 			glTexCoord2f(0.0, 1.0); glVertex3f(x,y+this->size,z-this->size); 	
@@ -104,7 +93,7 @@ void SkyBox::GenDisplayList()
 			glTexCoord2f(1.0, 0.0); glVertex3f(x+this->size,y+this->size,z);
 		glEnd();
 		
-		glBindTexture(GL_TEXTURE_2D, texture_skybox[5]);  
+		glBindTexture(GL_TEXTURE_2D, id_texture[5]);  
 		glBegin(GL_QUADS);			// bottom	
 			glTexCoord2f(1.0, 0.0); glVertex3f(x,y,z); 
 			glTexCoord2f(0.0, 0.0); glVertex3f(x+this->size,y,z);
@@ -115,10 +104,4 @@ void SkyBox::GenDisplayList()
 		glDepthMask(GL_TRUE);
 		glDisable(GL_TEXTURE_2D); 
 		glEnable(GL_LIGHTING);
-	glEndList();
-}
-
-void SkyBox::Draw()
-{
-	glCallList(display_list);
 }
