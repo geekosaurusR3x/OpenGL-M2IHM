@@ -8,6 +8,7 @@
 #endif
 
 #include <math.h>
+#include "vector3d.h"
 
 
 class MyCamera

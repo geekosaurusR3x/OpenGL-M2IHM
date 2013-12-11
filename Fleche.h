@@ -1,6 +1,7 @@
 #ifndef FLECHE_H
 #define FLECHE_H
 
+#include <iostream>
 #include "object.h"
 #include "Couleur.h"
 

@@ -90,9 +90,6 @@ void SkyBox::Draw()
 		glTexCoord2f(1.0, 0.0); glVertex3f(x,y+this->size,z);
 		glTexCoord2f(0.0, 0.0); glVertex3f(x+this->size,y+this->size,z);
 		glTexCoord2f(0.0, 1.0); glVertex3f(x+this->size,y,z);
- 
-
-		
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[4]); 
@@ -105,10 +102,10 @@ void SkyBox::Draw()
 	
 	glBindTexture(GL_TEXTURE_2D, texture_skybox[5]);  
 	glBegin(GL_QUADS);			// bottom	
-		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,z); 
-		glTexCoord2f(1.0, 1.0); glVertex3f(x+this->size,y,z);
-		glTexCoord2f(1.0, 0.0); glVertex3f(x+this->size,y,z-this->size);
-		glTexCoord2f(0.0, 0.0); glVertex3f(x,y,z-this->size);	
+		glTexCoord2f(1.0, 0.0); glVertex3f(x,y,z); 
+		glTexCoord2f(0.0, 0.0); glVertex3f(x+this->size,y,z);
+		glTexCoord2f(0.0, 1.0); glVertex3f(x+this->size,y,z-this->size);
+		glTexCoord2f(1.0, 1.0); glVertex3f(x,y,z-this->size);	
 	glEnd();
 	
 	glDepthMask(GL_TRUE);

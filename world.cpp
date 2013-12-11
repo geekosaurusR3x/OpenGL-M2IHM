@@ -72,7 +72,8 @@ void World::LoadWorld()
 	Add(EOLIENNE);
 	Add(BUGDROID);
 	//Ajout de la fleche
-	Arrow = Fleche(0,0,0,1);
+	Arrow = Fleche(200,200,0,1);
+	Arrow.SetDebug(debug);
 
 	InitFog();
 	
@@ -119,7 +120,9 @@ void World::DrawObject()
 	//Affichage de l'eau
 	Sea.Draw();
 	//affichage de la fleche
+
 	Arrow.Draw();
+		
 	//Boucle affichages objects
 	for(size_t i=0;i<ListeEolien.size();++i)
 	{
@@ -213,4 +216,9 @@ void World::ChangerColorEolienne(int num)
 	{
 		ListeEolien[i].SetColor(num);
 	}
+}
+
+double World::GetHauteur(double X, double Y)
+{
+	return Sol.GetHauteurPos(X,Y);
 }

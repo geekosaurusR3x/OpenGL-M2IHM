@@ -93,11 +93,7 @@ double Terran::GetHauteurPos(double X, double Z)
 {
 	int x = (X-this->x)/Map_Scale;
 	int z = (-Z-this->z)/Map_Scale;
-	double hauteur_moyene = 0;
-	if(debug){cout<<"Hauteur en X : "<<x<<" Y : "<<z<<" Hauteur : "<<terrain[x][z][1]<<endl;}
-	hauteur_moyene = (terrain[x][z][1]+terrain[x+1][z][1]+terrain[x][z+1][1]+terrain[x+1][z+1][1])/4;
-	if(debug){cout<<"Hauteur en X : "<<x<<" Y : "<<z<<" Hauteur : "<<hauteur_moyene<<endl;}
-	return hauteur_moyene;
+	return terrain[x][z][1];
 }
 
 void Terran::SetSizeWordl(double Size_Wordl)

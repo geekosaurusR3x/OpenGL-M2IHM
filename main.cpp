@@ -13,10 +13,12 @@
 #include <stdio.h>
 #include <iostream>
 #include <getopt.h>
+#include <string.h>
 #include "world.h"
 #include "sky_box.h"
 #include "eolien.h"
 #include "camera.h"
+#include "cam_free.h"
 
 //fin des includes 
 
@@ -31,34 +33,58 @@ using namespace std;
 
 bool debug = true;
 World Monde(1024.0);
-MyCamera Camm;
+MyCamera Camm_fixe;
+CamFree Camm_free(0.0,0.0,0.0);
 double scrollSensivity = 2.0;
 int frameCount = 0;
+double camx_past = 0;
+double camy_past = 0;
+bool free_cam = false;
+void output(GLfloat x, GLfloat y, std::string text)
+{
+    glPushMatrix();
+    glTranslatef(x, y, 0);
+    glScalef(1, 1, 1);
+    for (int i = 0; i < (int)text.length(); i++)
+    {
+        glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
+    }
+    glPopMatrix();
+}
 
 /* GLUT callback Handlers */
 
 static void resize(int width, int height)
 {
-	if (height==0){height=1;}
 
 	glViewport(0,0,width,height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height, 1 ,2048.0f);
+	gluPerspective(70,(double)width/height,1,1000);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
 static void display(void)
 {	
-	glLoadIdentity ();
 	glClear (GL_COLOR_BUFFER_BIT);
 	glClear (GL_DEPTH_BUFFER_BIT);
 
-	Camm.PositonCamera(0,0);
-	Monde.Draw();
+	glPushMatrix();
+	glLoadIdentity ();
 	
+	if(free_cam)
+	{
+		Camm_free.Draw();
+	}
+	else
+	{
+		Camm_fixe.PositonCamera(0,0);	
+	}
+	Monde.Draw();
+	output(0,200,"test");
+	glPopMatrix();
     glutSwapBuffers();
 }
 
@@ -67,10 +93,29 @@ static void key(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
+		case 'z':
+			Camm_free.Avancer();
+			break;
 		case 'q':
+			Camm_free.Gauche();
+			break;
+		case 's':
+			Camm_free.Reculer();
+			break;
+		case 'd':
+			Camm_free.Droite();
+			break;
+		case 'e':
 			exit(0);
 			break;
-		case 'r':
+		case 'c':
+			free_cam = !free_cam;
+			camx_past = x;
+			camy_past = y;
+			if(debug)
+			{
+				if(debug){cout<<"Free Cam : "<<free_cam<<endl;}
+			}
 			break;
 		case '-':
 			break;
@@ -94,34 +139,55 @@ void special(int key, int x, int y)
 }
 
 void mouseMove(int x, int y) 
-{ 	
+{
+	if(debug){cout<<x<<" "<<y<<endl;}
+	int camx = x-camx_past;
+	int camy = y-camy_past;
+	Camm_free.OnMouseMotion(camx,camy);
 }
 
 void mouseButton(int button, int state, int x, int y) 
 {
 	if (button == GLUT_LEFT_BUTTON) {
 		if (state == GLUT_DOWN) {
-			Camm.TogleRotate();
-			if(debug){cout<<"Toggle Rotation : "<<Camm.IsRotateCam()<<endl;}
+			Camm_fixe.TogleRotate();
+			if(debug){cout<<"Toggle Rotation : "<<Camm_fixe.IsRotateCam()<<endl;}
 		}
 	}
 	if (button == 3)
 	{
-		Camm.SetRayonRotation(Camm.GetRayonRotation()-scrollSensivity);
-		if(debug){cout<<"Zoom : "<<Camm.GetRayonRotation()<<endl;}
+		Camm_fixe.SetRayonRotation(Camm_fixe.GetRayonRotation()-scrollSensivity);
+		if(debug){cout<<"Zoom : "<<Camm_fixe.GetRayonRotation()<<endl;}
 	}
 	if (button == 4)
 	{
-		Camm.SetRayonRotation(Camm.GetRayonRotation()+scrollSensivity);
-		if(debug){cout<<"Zoom : "<<Camm.GetRayonRotation()<<endl;}
+		Camm_fixe.SetRayonRotation(Camm_fixe.GetRayonRotation()+scrollSensivity);
+		if(debug){cout<<"Zoom : "<<Camm_fixe.GetRayonRotation()<<endl;}
 	}
 }
 
 
 static void idle(void)
 {
-	Camm.Update();
-	Monde.Update(Camm.GetFlecheX(),Camm.GetFlecheY(),Camm.GetFlecheZ());
+	double x;
+	double y;
+	double z;
+	if(free_cam)
+	{
+		x = Camm_free.GetX();
+		y = Camm_free.GetY();
+		z = Camm_free.GetZ();
+	}
+	else
+	{
+		x = Camm_fixe.GetFlecheX();
+		y = Camm_fixe.GetFlecheY();
+		z = Camm_fixe.GetFlecheZ();
+	}
+	
+	Camm_fixe.Update();
+	Camm_free.SetY(Monde.GetHauteur(Camm_free.GetX(),Camm_free.GetZ()));
+	Monde.Update(x,y,z);
     glutPostRedisplay();
 }
 
@@ -285,7 +351,7 @@ int main(int argc, char *argv[])
     glutKeyboardFunc(key);
     glutSpecialFunc(special);
 	glutMouseFunc(mouseButton);
-	glutMotionFunc(mouseMove);
+	glutPassiveMotionFunc(mouseMove);
     glutIdleFunc(idle);
 
     glClearColor(1,1,1,1);

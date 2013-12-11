@@ -47,6 +47,7 @@ public:
 	void ChangeTextureMap(int num);
 	void ChangerColorEolienne(int num);
 	void Update(double camX,double camY,double camZ);
+	double GetHauteur(double X,double Y);
 	
 	void SetDataDir(const std::string& Data_Dir) {
 		this->Data_Dir = Data_Dir;
