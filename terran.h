@@ -1,11 +1,11 @@
 #ifndef TERRAN_H
 #define TERRAN_H
 
-#define SIZE_MAP 128
-#define MAX_TEXTURE_1   60
-#define MIX_TEXTURE_1_2   130 
-#define MAX_TEXTURE_2   180
-#define MIX_TEXTURE_2_3   220  
+#define SIZE_MAP 512
+#define TEXTURE_MAP_1 1
+#define TEXTURE_MAP_2 2
+#define TEXTURE_MAP_NAME_1 "map_texture1"
+#define TEXTURE_MAP_NAME_2 "map_texture2"
                    
 #include "object.h"
 #include "fonctions.h"
@@ -27,26 +27,19 @@ public:
 	}
 	void SetSizeWordl(double Size_Wordl);
 	double GetHauteurPos(double X,double Z);
-	void TexureCrapy();
-	void TextureNice();
-
-	void SetNice(bool nice) {this->nice = nice;}
+	void LoadTextureMap(int num);
 	
 private:
-
-	bool nice;
+	GLuint texture_terrain[2];
+	GLuint display_list;
 	double terrain[SIZE_MAP][SIZE_MAP][3];
 	double Size_Demi_Wordl;
 	double Map_Scale;
-	GLuint texture_terrain[2];
 
 	void LoadModelMap();
-	void LoadTextureMap();
-	
 	int GetColorPixel(unsigned char * img, int x, int y,int pos);
-	void GetPercent(float *value, double hauteur);
-	void DrawCrapy();
-	void DrawNice();
+	
+	void GenDisplayList();
 };
 
 #endif // TERRAN_H

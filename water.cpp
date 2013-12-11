@@ -90,7 +90,7 @@ void Water::GenerateWater()
 			water[j][i][1] = this->y;
 			water[j][i][2] = -(double(i)*Map_Scale)+this->z;
 			if(debug) {
-				cout<<water[j][i][0]<<" "<<water[j][i][1]<<" "<<water[j][i][2]<<endl;
+				//cout<<water[j][i][0]<<" "<<water[j][i][1]<<" "<<water[j][i][2]<<endl;
 			}
 		}
 	}
@@ -102,15 +102,12 @@ void Water::GenerateWater()
 
 void Water::LoadTexture()
 {
-	unsigned char *Texture = 0;
 	glGenTextures(1, texture_water);
 	try {
-		struct jpeg_decompress_struct cinfo;
-		Texture = loadJpegImage(this->Data_Dir+"/Textures/water.jpg",&cinfo);
+		loadJpegTexture(this->Data_Dir+"/Textures/water.jpg",texture_water[0]);
 	} catch (const jpeg_load_exception &e) {
 		if (debug) {
 			cout<<e.what()<<endl;
 		}
 	}
-	setTexture(Texture,this->size,this->size,texture_water[0]);
 }

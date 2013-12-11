@@ -47,6 +47,7 @@ protected :
 	double z;
 	double size;
 	std::string Data_Dir;
+	
 };
 
 #endif // OBJECT_H

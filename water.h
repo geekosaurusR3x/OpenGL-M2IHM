@@ -5,11 +5,7 @@
 #include "Couleur.h"
 #include "fonctions.h"
 #include <iostream>
-#include <math.h>
-
-#ifndef M_PI
- #define M_PI 3.141592653589793
-#endif 
+#include <math.h> 
 
 class Water : public Object
 {

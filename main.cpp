@@ -140,7 +140,6 @@ void special(int key, int x, int y)
 
 void mouseMove(int x, int y) 
 {
-	if(debug){cout<<x<<" "<<y<<endl;}
 	int camx = x-camx_past;
 	int camy = y-camy_past;
 	Camm_free.OnMouseMotion(camx,camy);

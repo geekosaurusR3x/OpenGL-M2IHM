@@ -17,8 +17,10 @@ public:
 	void Load();
 	void LoadTexture(int num);
 	void Draw();
+	void GenDisplayList();
 private:
 	GLuint texture_skybox[6];
+	GLuint display_list;
 };
 
 #endif // SKYBOX_H

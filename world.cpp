@@ -63,7 +63,7 @@ void World::LoadWorld()
 	Sol.SetDataDir(this->Data_Dir);
 	Sol.Load();
 	//Ajout de l'eau
-	Sea = Water(-Demi_Size,60,Demi_Size,this->Sol.GetSize());
+	Sea = Water(-Demi_Size,60,Demi_Size,this->Sol.GetSize()/4);
 	Sea.SetDebug(debug);
 	Sea.SetDataDir(this->Data_Dir);
 	Sea.SetSizeWordl(this->Size);
@@ -137,8 +137,7 @@ void World::DrawObject()
 
 void World::ChangeTextureMap(int num)
 {
-	Sol.TextureNice();
-	if(num == 0){Sol.TexureCrapy();}
+	Sol.LoadTextureMap(num);
 }
 
 void World::Add(int choice)

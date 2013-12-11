@@ -45,7 +45,7 @@ void Fleche::Draw()
 
 void Fleche::Update()
 {
-	if(debug){cout<<"Position de la fleche"<<this->x<<" "<<this->y<<" "<<this->z<<endl;}
+	//if(debug){cout<<"Position de la fleche"<<this->x<<" "<<this->y<<" "<<this->z<<endl;}
 	float alpha = this->ForceVent/240.0f;
 	if(alpha == 0.0){alpha = 0.1;}
 	this->Couleur[3]=alpha;
