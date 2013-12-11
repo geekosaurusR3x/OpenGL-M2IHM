@@ -7,7 +7,7 @@ Fleche::Fleche()
 }
 Fleche::Fleche(double x, double y, double z,double size):Object(x,y,z,size)
 {
-    this->Couleur = vertFonce;
+    this->color = vertFonce;
 }
 
 Fleche::~Fleche()
@@ -15,7 +15,7 @@ Fleche::~Fleche()
     //dtor
 }
 
-void Fleche::Draw()
+void Fleche::DrawChild()
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -23,7 +23,7 @@ void Fleche::Draw()
     GLUquadric* params = gluNewQuadric();
     gluQuadricDrawStyle(params,GLU_FILL);
 
-    glColor4dv(this->Couleur);
+    glColor4dv(this->color);
     glPushMatrix();
 		glScaled(this->size,this->size,this->size);
         glTranslated(this->x,this->y,this->z);
@@ -45,8 +45,7 @@ void Fleche::Draw()
 
 void Fleche::Update()
 {
-	//if(debug){cout<<"Position de la fleche"<<this->x<<" "<<this->y<<" "<<this->z<<endl;}
 	float alpha = this->ForceVent/240.0f;
 	if(alpha == 0.0){alpha = 0.1;}
-	this->Couleur[3]=alpha;
+	this->color[3]=alpha;
 }

@@ -137,7 +137,7 @@ void World::DrawObject()
 
 void World::ChangeTextureMap(int num)
 {
-	Sol.LoadTextureMap(num);
+	Sol.LoadTexture(num);
 }
 
 void World::Add(int choice)
@@ -154,14 +154,15 @@ void World::Add(int choice)
 				cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
 			}
 			ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
+			ListeEolien.back().SetDebug(true);
 			break;
 		case BUGDROID:
 			nbBug++;
 			if(debug){
 				cout<<"Ajout d'un BugDroid en X: "<<X<<" Z: "<<Z<<endl;
 			}
-			ListeBug.push_back(BugDroid(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()+10));
-			ListeBug.back().SetDebug(false);
+			ListeBug.push_back(BugDroid(X,Sol.GetHauteurPos(X,Z)+30,Z,Sol.GetMapScale()+5));
+			ListeBug.back().SetDebug(true);
 			ListeBug.back().SetDataDir(this->Data_Dir);
 			ListeBug.back().Load();
 			break;

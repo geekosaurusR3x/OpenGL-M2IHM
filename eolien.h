@@ -7,14 +7,13 @@
 #define EOLIEN_COULEUR_4 4
 
 #include "object.h"
-#include "Couleur.h"
 class Eolien : public Object
 {
 public:
 	Eolien();
 	Eolien(double X, double Y, double Z, double Zoom);
 	~Eolien();
-	void Draw();
+	void DrawChild();
 	void SetOrientationVent(double OrientationVent) {
 		this->OrientationVent = OrientationVent;
 	}
@@ -28,7 +27,6 @@ private:
 	int pas;
 	double Wind;
 	double OrientationVent;
-	double* color;
 
 };
 

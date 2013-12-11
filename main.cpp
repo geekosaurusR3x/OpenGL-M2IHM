@@ -15,8 +15,6 @@
 #include <getopt.h>
 #include <string.h>
 #include "world.h"
-#include "sky_box.h"
-#include "eolien.h"
 #include "camera.h"
 #include "cam_free.h"
 
@@ -61,7 +59,7 @@ static void resize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(70,(double)width/height,1,1000);
+	gluPerspective(70,(double)width/height,1,1024);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -140,9 +138,11 @@ void special(int key, int x, int y)
 
 void mouseMove(int x, int y) 
 {
+	if(debug){cout<<"x: "<<x<<" y:"<<y<<endl;}
 	int camx = x-camx_past;
 	int camy = y-camy_past;
-	Camm_free.OnMouseMotion(camx,camy);
+	Camm_free.OnMouseMotion(camx,-camy);
+	
 }
 
 void mouseButton(int button, int state, int x, int y) 
@@ -156,12 +156,10 @@ void mouseButton(int button, int state, int x, int y)
 	if (button == 3)
 	{
 		Camm_fixe.SetRayonRotation(Camm_fixe.GetRayonRotation()-scrollSensivity);
-		if(debug){cout<<"Zoom : "<<Camm_fixe.GetRayonRotation()<<endl;}
 	}
 	if (button == 4)
 	{
 		Camm_fixe.SetRayonRotation(Camm_fixe.GetRayonRotation()+scrollSensivity);
-		if(debug){cout<<"Zoom : "<<Camm_fixe.GetRayonRotation()<<endl;}
 	}
 }
 
@@ -171,6 +169,8 @@ static void idle(void)
 	double x;
 	double y;
 	double z;
+	Camm_fixe.Update();
+	Camm_free.SetY(Monde.GetHauteur(Camm_free.GetX(),Camm_free.GetZ()));
 	if(free_cam)
 	{
 		x = Camm_free.GetX();
@@ -184,8 +184,6 @@ static void idle(void)
 		z = Camm_fixe.GetFlecheZ();
 	}
 	
-	Camm_fixe.Update();
-	Camm_free.SetY(Monde.GetHauteur(Camm_free.GetX(),Camm_free.GetZ()));
 	Monde.Update(x,y,z);
     glutPostRedisplay();
 }
@@ -330,8 +328,8 @@ int main(int argc, char *argv[])
 		glutAddMenuEntry("Non",1);
           
 	int MapMenu = glutCreateMenu(TextureMapMenu);
-		glutAddMenuEntry("Texture herbe",0);
-		glutAddMenuEntry("Texture Zerg",1);
+		glutAddMenuEntry("Texture herbe",TEXTURE_MAP_1);
+		glutAddMenuEntry("Texture Zerg",TEXTURE_MAP_2);
 		
 	glutCreateMenu(SelectChoice);
 		glutAddSubMenu("Force du vent",WindMenu);

@@ -8,8 +8,6 @@
 #define TEXTURE_MAP_NAME_2 "map_texture2"
                    
 #include "object.h"
-#include "fonctions.h"
-#include "jpeg_exception.h"
 #include <math.h>
 
 class Terran : public Object
@@ -18,8 +16,8 @@ public:
 	Terran();
 	Terran(double X,double Y, double Z, double Size);
 	~Terran();
-	void Load();
-	void Draw();
+	void LoadChild();
+	void DrawChild();
 
 
 	double GetMapScale() const {
@@ -27,11 +25,9 @@ public:
 	}
 	void SetSizeWordl(double Size_Wordl);
 	double GetHauteurPos(double X,double Z);
-	void LoadTextureMap(int num);
+	void LoadTexture(int num);
 	
 private:
-	GLuint texture_terrain[2];
-	GLuint display_list;
 	double terrain[SIZE_MAP][SIZE_MAP][3];
 	double Size_Demi_Wordl;
 	double Map_Scale;
@@ -39,7 +35,6 @@ private:
 	void LoadModelMap();
 	int GetColorPixel(unsigned char * img, int x, int y,int pos);
 	
-	void GenDisplayList();
 };
 
 #endif // TERRAN_H

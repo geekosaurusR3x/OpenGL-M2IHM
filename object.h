@@ -7,6 +7,7 @@
 #endif
 
 #include "fonctions.h"
+#include "Couleur.h"
 #include <string>
 
 class Object
@@ -21,8 +22,9 @@ public:
 	virtual void DrawChild();
 	virtual void Update();
 	void LoadTextureObject(std::string name, int num);
-
-
+	void LoadInfoObject(std::string name);
+	void LoadDataObject(std::string name);
+	void DrawObject();
 	void SetX(double x) {
 		this->x = x;
 	}
@@ -45,16 +47,32 @@ public:
 		return size;
 	}
 protected :
+	//partie standar
 	bool debug;
 	bool display_list;
+	bool texture;
+	bool model3D;
 	double x;
 	double y;
 	double z;
 	double size;
-	int nbtexture;
+	double* color;
 	std::string Data_Dir;
+	//partie texture
+	int nbtexture;
 	GLuint *id_texture;
+	//partie display list
 	GLuint id_display_list;
+	//partie model3D
+	float *positions_vertex;
+	float *texels;	
+	float *normals;
+	short *faces;
+	int nb_position;
+	int nb_textels;
+	int nb_normals;
+	int nb_faces;
+	int nb_verticles;
 	
 };
 

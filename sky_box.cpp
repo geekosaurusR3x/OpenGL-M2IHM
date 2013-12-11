@@ -10,7 +10,8 @@ SkyBox::SkyBox():Object()
 SkyBox::SkyBox(double X,double Y,double Z,double Size):Object(X,Y,Z,Size)
 {
 	nbtexture = 6;
-	display_list = true;
+	display_list = false;
+	texture = true;
 }
 
 SkyBox::~SkyBox()
@@ -34,14 +35,18 @@ void SkyBox::LoadTexture(int num)
 		name = TEXTURE_SKYBOX_NAME_2;
 	}
 
-	if (debug){cout<<"Chargement Texture Skybox : "<<name<<" Numero :"<<num <<endl;}
-
+	if (debug)
+	{
+		cout<<"Chargement Texture Skybox : "<<name<<" Numero :"<<num <<endl;
+		cout<<"Chargement de la texture de la skymap..."<<endl;
+	}
 	LoadTextureObject(name+"_left",0); //left
 	LoadTextureObject(name+"_front",1); //front
 	LoadTextureObject(name+"_right",2); //right
 	LoadTextureObject(name+"_back",3); //back
 	LoadTextureObject(name+"_top",4); //top
 	LoadTextureObject(name+"_bottom",5); //bottom
+	if (debug){cout<<"Chargement de la texture de la skymap FINIT"<<endl;}
 }
 
 void SkyBox::DrawChild()
@@ -49,7 +54,6 @@ void SkyBox::DrawChild()
 		glEnable(GL_TEXTURE_2D); 
 		glDisable(GL_LIGHTING);
 		glDepthMask(GL_FALSE);
-
 	   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	   glColor3f(0,0,0);
 		// Rendu de la skybox

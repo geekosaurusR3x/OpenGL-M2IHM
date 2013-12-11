@@ -14,7 +14,7 @@ Eolien::~Eolien()
 {
 }
 
-void Eolien::Draw()
+void Eolien::DrawChild()
 {
    //vitesse de rotation des pales
     double Periode = glutGet(GLUT_ELAPSED_TIME) / 1000.0;

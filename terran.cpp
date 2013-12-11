@@ -8,30 +8,25 @@ Terran::Terran()
 
 Terran::Terran(double X,double Y,double Z,double Size):Object(X,Y,Z,SIZE_MAP)
 {
+	nbtexture = 1;
+	display_list = true;
+	texture = true;
 }
 Terran::~Terran()
 {
 }
 
-void Terran::Load()
+void Terran::LoadChild()
 {
-		glGenTextures(1, texture_terrain);
 		LoadModelMap();
-		LoadTextureMap(TEXTURE_MAP_1);
-		GenDisplayList();
-}
-void Terran::Draw()
-{
-	glCallList(display_list);
+		LoadTexture(TEXTURE_MAP_1);
 }
 
-void Terran::GenDisplayList()
+void Terran::DrawChild()
 {
-	display_list = glGenLists(1);
-	glNewList(display_list, GL_COMPILE);
 		glEnable(GL_TEXTURE_2D);
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); 
-		glBindTexture(GL_TEXTURE_2D, texture_terrain[0]);
+		glBindTexture(GL_TEXTURE_2D, id_texture[0]);
 		glBegin(GL_TRIANGLE_STRIP);
 		for (int z = 0; z < this->size-1; z++)
 		{
@@ -56,7 +51,6 @@ void Terran::GenDisplayList()
 		}
 		glEnd(); 
 		glDisable(GL_TEXTURE_2D);
-	glEndList();
 }
 
 double Terran::GetHauteurPos(double X, double Z)
@@ -100,7 +94,7 @@ void Terran::LoadModelMap()
 	if (debug){cout<<"Generation du model map FINIT"<<endl;}
 }
 
-void Terran::LoadTextureMap(int num)
+void Terran::LoadTexture(int num)
 {
 	string name;
 	if (num == TEXTURE_MAP_1)
@@ -112,15 +106,12 @@ void Terran::LoadTextureMap(int num)
 		name = TEXTURE_MAP_NAME_2;
 	}
 	
-	if (debug){cout<<"Chargement de la texture de la map..."<<endl;}
-	try
+	if (debug)
 	{
-		loadJpegTexture(this->Data_Dir+"/Textures/"+name+".jpg",texture_terrain[0]);
+		cout<<"Chargement Texture Map : "<<name<<" Numero :"<<num <<endl;
+		cout<<"Chargement de la texture de la map..."<<endl;
 	}
-	catch (const jpeg_load_exception &e)
-	{
-		if (debug){cout<<e.what()<<endl;}
-	}
+	LoadTextureObject(name,0);
 	if (debug){cout<<"Chargement de la texture de la map FINIT"<<endl;}
 }
 

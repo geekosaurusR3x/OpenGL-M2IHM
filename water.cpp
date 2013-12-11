@@ -8,20 +8,22 @@ Water::Water()
 
 Water::Water(double X,double Y,double Z,double Size):Object(X,Y,Z,Size)
 {
+	this->color = bleuMer;
+	this->color[3] = 0.3;
+	
 }
 
 Water::~Water()
 {
 }
-void Water::Draw()
+
+void Water::DrawChild()
 {
-	glDisable(GL_LIGHTING);
-	//glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glColor4ub(100,100,255,128);
-	glBindTexture(GL_TEXTURE_2D, texture_water[0]);
+	glColor4dv(this->color);
+	glBindTexture(GL_TEXTURE_2D, id_texture[0]);
 	glBegin(GL_TRIANGLE_STRIP);
 	for (int j = 0; j < this->size-1; j++) {
 		for (int i = 0; i < this->size-1; i++) {
@@ -41,14 +43,11 @@ void Water::Draw()
 	}
 	glEnd();
 	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_LIGHTING);
 }
 
-void Water::Load()
+void Water::LoadChild()
 {
 	GenerateWater();
-	LoadTexture();
 }
 
 void Water::SetSizeWordl(double Size_Wordl)
@@ -89,25 +88,10 @@ void Water::GenerateWater()
 			water[j][i][0] = (double(j)*Map_Scale)+this->x;
 			water[j][i][1] = this->y;
 			water[j][i][2] = -(double(i)*Map_Scale)+this->z;
-			if(debug) {
-				//cout<<water[j][i][0]<<" "<<water[j][i][1]<<" "<<water[j][i][2]<<endl;
-			}
 		}
 	}
 
 	if(debug) {
 		cout<<"Generation de la mer FINIT"<<endl;
-	}
-}
-
-void Water::LoadTexture()
-{
-	glGenTextures(1, texture_water);
-	try {
-		loadJpegTexture(this->Data_Dir+"/Textures/water.jpg",texture_water[0]);
-	} catch (const jpeg_load_exception &e) {
-		if (debug) {
-			cout<<e.what()<<endl;
-		}
 	}
 }

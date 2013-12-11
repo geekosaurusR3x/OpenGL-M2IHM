@@ -12,7 +12,7 @@ public:
 	Fleche();
 	Fleche(double x, double y, double z,double size);
 	virtual ~Fleche();
-	void Draw();
+	void DrawChild();
 	void SetForceVent(int ForceVent) {
 		this->ForceVent = ForceVent;
 	}
@@ -22,7 +22,7 @@ public:
 	void Update();
 
 private:
-	double* Couleur;
+
 	int OrientationVent;
 	int ForceVent;
 };

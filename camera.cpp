@@ -5,7 +5,7 @@ MyCamera::MyCamera()
   this->Rotate_Cam=false;
   this->angle_cam = 180.0;
   this->rayon_rotation = 200.0;
-  this->camY = 300.0;
+  this->camY = 200.0;
   this->flecheY = this->camY;
 }
 
