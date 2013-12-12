@@ -7,56 +7,48 @@
 #include <GL/glut.h>
 #endif
 
-#include <math.h>
 #include "vector3d.h"
+#include <math.h>
 
-
-class MyCamera
+class Camera
 {
 public:
-	MyCamera();
-	~MyCamera();
-	void TogleRotate();
-	void PositonCamera(double xCentre, double zCentre);
-
-	bool IsRotateCam() const {
-		return Rotate_Cam;
-	}
-
-	void SetRayonRotation(double rayon_rotation) {
-		if (rayon_rotation>0)
-		{
-			this->rayon_rotation = rayon_rotation;
-		}
-	}
-
-	double GetRayonRotation() const {
-		return rayon_rotation;
-	}
+	Camera();
+	Camera(double x, double y, double z);
+	virtual ~Camera()=0;
+	void LookAt();
+	void Update();
+	virtual void UpdateChild();
+	
 	double GetFlecheX() const {
-		return flecheX;
+		return position_fleche.X;
 	}
 	double GetFlecheY() const {
-		return flecheY;
+		return position_fleche.Y;
 	}
 	double GetFlecheZ() const {
-		return flecheZ;
+		return position_fleche.Z;
 	}
 	
-	void PositonCamera();
-	void Update();
-	
-private:
-	bool Rotate_Cam;
-	double angle_cam;
-	double rayon_rotation;
-	double camX;
-	double camY;
-	double camZ;
-	double flecheX;
-	double flecheY;
-	double flecheZ;
+	double GetX() const {
+		return position.X;
+	}
+	double GetY() const {
+		return position.Y;
+	}
+	void SetY(double y) {
+		position.Y = y;
+	}
+	double GetZ() const {
+		return position.Z;
+	}
 
+protected:
+	Vector3D position;
+	Vector3D target;
+	Vector3D position_fleche;
+	
+	void CalculPosFleche();
 };
 
 #endif // CAMERA_H

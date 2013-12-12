@@ -23,7 +23,6 @@ void Water::DrawChild()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4dv(this->color);
-	glBindTexture(GL_TEXTURE_2D, id_texture[0]);
 	glBegin(GL_TRIANGLE_STRIP);
 	for (int j = 0; j < this->size-1; j++) {
 		for (int i = 0; i < this->size-1; i++) {

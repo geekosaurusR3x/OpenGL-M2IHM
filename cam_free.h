@@ -1,33 +1,21 @@
 #ifndef CAMFREE_H
 #define CAMFREE_H
+#include "camera.h"
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
-
-#include <math.h>
-#include "vector3d.h"
-class CamFree
+class CamFree: public Camera
 {
 public:
+	CamFree();
 	CamFree(double x, double y, double z);
 	~CamFree();
-	void Draw();
 	void OnMouseMotion(int x, int y);
 	void Avancer();
 	void Reculer();
 	void Droite();
 	void Gauche();
-	void SetY(double Y);
-	double GetX();
-	double GetZ();
-	double GetY();
+	void UpdateChild();
 
 private :
-	Vector3D position;
-	Vector3D target;
 	Vector3D forward;
 	Vector3D left;
 	double angle_vertical;

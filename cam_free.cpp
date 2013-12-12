@@ -1,8 +1,12 @@
 #include "cam_free.h"
 
-CamFree::CamFree(double x, double y, double z)
+CamFree::CamFree()
 {
-	position = Vector3D(x,y,z);
+	CamFree(0,0,0);
+}
+
+CamFree::CamFree(double x, double y, double z):Camera(x,y,z)
+{
     angle_vertical = 0;
     angle_horizontal = 0;
 	mouse_sensibilite = 0.003;
@@ -28,7 +32,7 @@ void CamFree::VectorsFromAngles()
     left = up.crossProduct(forward);
     left.normalize();
 
-    target = position + forward;
+	UpdateChild();
 }
 
 
@@ -38,53 +42,34 @@ void CamFree::OnMouseMotion(int x, int y)
     angle_horizontal += y*mouse_sensibilite;
     VectorsFromAngles();
 }
-void CamFree::Draw()
-{
-    gluLookAt(position.X,position.Y,position.Z,target.X,target.Y,target.Z, 0,1,0);
-}
 
 void CamFree::Avancer()
 {
 	position += forward*keyboard_sensibilite;
-	target = position + forward;
+	UpdateChild();
 }
 
 void CamFree::Reculer()
 {
 	position -= forward*keyboard_sensibilite;
-	target = position + forward;
+	UpdateChild();
 }
 
 
 void CamFree::Droite()
 {
 	position -=left*keyboard_sensibilite;
-	target = position + forward;
+	UpdateChild();
 }
 
 void CamFree::Gauche()
 {
 	position +=left*keyboard_sensibilite;
+	UpdateChild();
+}
+
+void CamFree::UpdateChild()
+{
 	target = position + forward;
-}
-
-void CamFree::SetY(double Y)
-{
-	position.Y=Y+4;
-	target = position + forward;
-}
-
-double CamFree::GetX()
-{
-	return position.X;
-}
-
-double CamFree::GetZ()
-{
-	return position.Z;
-}
-
-double CamFree::GetY()
-{
-	return position.Y;
+	CalculPosFleche();
 }

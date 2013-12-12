@@ -15,7 +15,7 @@
 #include <getopt.h>
 #include <string.h>
 #include "world.h"
-#include "camera.h"
+#include "cam_rotate.h"
 #include "cam_free.h"
 
 //fin des includes 
@@ -31,13 +31,20 @@ using namespace std;
 
 bool debug = true;
 World Monde(1024.0);
-MyCamera Camm_fixe;
+
+CamRotate Camm_fixe(0.0,200.0,0.0);
 CamFree Camm_free(0.0,0.0,0.0);
+Camera * Camm;
+
 double scrollSensivity = 2.0;
 int frameCount = 0;
 double camx_past = 0;
 double camy_past = 0;
 bool free_cam = false;
+
+int winIdMain;
+int winIdSub;
+
 void output(GLfloat x, GLfloat y, std::string text)
 {
     glPushMatrix();
@@ -59,7 +66,7 @@ static void resize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(70,(double)width/height,1,1024);
+	gluPerspective(70,(double)width/height,1,1500);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -72,14 +79,7 @@ static void display(void)
 	glPushMatrix();
 	glLoadIdentity ();
 	
-	if(free_cam)
-	{
-		Camm_free.Draw();
-	}
-	else
-	{
-		Camm_fixe.PositonCamera(0,0);	
-	}
+	Camm->LookAt();
 	Monde.Draw();
 	output(0,200,"test");
 	glPopMatrix();
@@ -92,16 +92,16 @@ static void key(unsigned char key, int x, int y)
 	switch (key)
 	{
 		case 'z':
-			Camm_free.Avancer();
+			if(free_cam){Camm_free.Avancer();}
 			break;
 		case 'q':
-			Camm_free.Gauche();
+			if(free_cam){Camm_free.Gauche();}
 			break;
 		case 's':
-			Camm_free.Reculer();
+			if(free_cam){Camm_free.Reculer();}
 			break;
 		case 'd':
-			Camm_free.Droite();
+			if(free_cam){Camm_free.Droite();}
 			break;
 		case 'e':
 			exit(0);
@@ -110,6 +110,14 @@ static void key(unsigned char key, int x, int y)
 			free_cam = !free_cam;
 			camx_past = x;
 			camy_past = y;
+			if(free_cam)
+			{
+				Camm = &Camm_free;
+			}
+			else
+			{
+				Camm = &Camm_fixe;
+			}
 			if(debug)
 			{
 				if(debug){cout<<"Free Cam : "<<free_cam<<endl;}
@@ -141,23 +149,23 @@ void mouseMove(int x, int y)
 	if(debug){cout<<"x: "<<x<<" y:"<<y<<endl;}
 	int camx = x-camx_past;
 	int camy = y-camy_past;
-	Camm_free.OnMouseMotion(camx,-camy);
+	if(free_cam){Camm_free.OnMouseMotion(camx,camy);}
 	
 }
 
 void mouseButton(int button, int state, int x, int y) 
 {
 	if (button == GLUT_LEFT_BUTTON) {
-		if (state == GLUT_DOWN) {
+		if (state == GLUT_DOWN && !free_cam) {
 			Camm_fixe.TogleRotate();
 			if(debug){cout<<"Toggle Rotation : "<<Camm_fixe.IsRotateCam()<<endl;}
 		}
 	}
-	if (button == 3)
+	if (button == 3 && !free_cam)
 	{
 		Camm_fixe.SetRayonRotation(Camm_fixe.GetRayonRotation()-scrollSensivity);
 	}
-	if (button == 4)
+	if (button == 4 && !free_cam)
 	{
 		Camm_fixe.SetRayonRotation(Camm_fixe.GetRayonRotation()+scrollSensivity);
 	}
@@ -166,25 +174,9 @@ void mouseButton(int button, int state, int x, int y)
 
 static void idle(void)
 {
-	double x;
-	double y;
-	double z;
-	Camm_fixe.Update();
-	Camm_free.SetY(Monde.GetHauteur(Camm_free.GetX(),Camm_free.GetZ()));
-	if(free_cam)
-	{
-		x = Camm_free.GetX();
-		y = Camm_free.GetY();
-		z = Camm_free.GetZ();
-	}
-	else
-	{
-		x = Camm_fixe.GetFlecheX();
-		y = Camm_fixe.GetFlecheY();
-		z = Camm_fixe.GetFlecheZ();
-	}
-	
-	Monde.Update(x,y,z);
+	if(free_cam){Camm_free.SetY(Monde.GetHauteur(Camm_free.GetX(),Camm_free.GetZ())+4);}
+	Camm->Update();
+	Monde.Update(Camm->GetFlecheX(),Camm->GetFlecheY(),Camm->GetFlecheZ());
     glutPostRedisplay();
 }
 
@@ -293,7 +285,7 @@ int main(int argc, char *argv[])
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutCreateWindow("Projet OPENGL");
+    winIdMain = glutCreateWindow("Projet OPENGL");
 
 	int WindMenu = glutCreateMenu(WindChange);
 		glutAddMenuEntry("Nul",0);
@@ -375,6 +367,7 @@ int main(int argc, char *argv[])
 
 	//fin initialisation OPENGL
 	//init autre
+	Camm = &Camm_fixe; //on commence avec la cam fixe
 	Monde.SetDebug(debug);
 	Monde.SetDataDir(datadir);
 	Monde.LoadWorld();

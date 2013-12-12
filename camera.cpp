@@ -1,41 +1,40 @@
 #include "camera.h"
 
-MyCamera::MyCamera()
-{
-  this->Rotate_Cam=false;
-  this->angle_cam = 180.0;
-  this->rayon_rotation = 200.0;
-  this->camY = 200.0;
-  this->flecheY = this->camY;
-}
-
-MyCamera::~MyCamera()
+Camera::Camera()
 {
 }
 
-void MyCamera::PositonCamera(double xCentre, double zCentre)
+Camera::Camera(double x, double y, double z)
 {
-  
-  gluLookAt (this->camX,this->camY,this->camZ, xCentre,90.0,zCentre,0.0,1.0,0.0);
-  
+	this->position = Vector3D(x,y,z);
 }
 
-void MyCamera::TogleRotate()
+Camera::~Camera()
 {
-  this->Rotate_Cam=!this->Rotate_Cam;
 }
 
-void MyCamera::Update()
+void Camera::LookAt()
 {
-   if (this->Rotate_Cam)
-  {
-    this->angle_cam += 0.01;
-    this->angle_cam = fmod(this->angle_cam,360.0);
-  }
-  this->camX = 0 + this->rayon_rotation*cos(this->angle_cam);
-  this->camZ = 0 + this->rayon_rotation*sin(this->angle_cam);
-  
-  this->flecheX = 0 + (this->rayon_rotation-1.5)*cos(this->angle_cam);
-  this->flecheZ = 0 + (this->rayon_rotation-1.5)*sin(this->angle_cam);
-  
+	gluLookAt(this->position.X,this->position.Y,this->position.Z,this->target.X,this->target.Y,this->target.Z, 0,1,0);
+}
+
+void Camera::CalculPosFleche()
+{
+	int d = 2;
+	double dsurPC = d/sqrt(pow(this->position.X-this->target.X,2)+pow(this->position.Y-this->target.Y,2)+pow(this->position.Z-this->target.Z,2));
+	double lamba1 = 1 - dsurPC;
+	
+	this->position_fleche.X = (lamba1*this->position.X)+((1-lamba1)*this->target.X);
+	this->position_fleche.Y = (lamba1*this->position.Y)+((1-lamba1)*this->target.Y);
+	this->position_fleche.Z = (lamba1*this->position.Z)+((1-lamba1)*this->target.Z);
+}
+
+void Camera::Update()
+{
+	UpdateChild();
+	this->CalculPosFleche();
+}
+
+void Camera::UpdateChild()
+{
 }

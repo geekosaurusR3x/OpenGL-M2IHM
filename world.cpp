@@ -194,6 +194,7 @@ void World::Remove(int choice)
 
 void World::Update(double camX,double camY,double camZ)
 {
+	if(debug){cout<<"Arrox pos "<<camX<<" "<<camY<<" "<<camZ<<endl;}
 	Arrow.SetX(camX);
 	Arrow.SetY(camY);
 	Arrow.SetZ(camZ);
