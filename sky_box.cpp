@@ -10,7 +10,7 @@ SkyBox::SkyBox():Object()
 SkyBox::SkyBox(double X,double Y,double Z,double Size):Object(X,Y,Z,Size)
 {
 	nbtexture = 6;
-	display_list = false;
+	display_list = true;
 	texture = true;
 }
 

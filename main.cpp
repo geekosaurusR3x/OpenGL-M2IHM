@@ -25,6 +25,8 @@
 #define required_argument 1 
 #define optional_argument 2
 #define DATA_DIR "Datas"
+#define WIDTH 800
+#define HEIGHT 600
 //fin defines
 
 using namespace std;
@@ -73,6 +75,7 @@ static void resize(int width, int height)
 
 static void display(void)
 {	
+	glutSetWindow (winIdMain);
 	glClear (GL_COLOR_BUFFER_BIT);
 	glClear (GL_DEPTH_BUFFER_BIT);
 
@@ -177,7 +180,9 @@ static void idle(void)
 	if(free_cam){Camm_free.SetY(Monde.GetHauteur(Camm_free.GetX(),Camm_free.GetZ())+4);}
 	Camm->Update();
 	Monde.Update(Camm->GetFlecheX(),Camm->GetFlecheY(),Camm->GetFlecheZ());
-    glutPostRedisplay();
+
+	glutPostWindowRedisplay(winIdMain);
+	glutPostWindowRedisplay(winIdSub);
 }
 
 void WindChange(int choice)
@@ -281,7 +286,7 @@ int main(int argc, char *argv[])
 	//fin
 
     glutInit(&argc, argv);
-    glutInitWindowSize(800,600);
+    glutInitWindowSize(WIDTH,HEIGHT);
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
@@ -365,6 +370,11 @@ int main(int argc, char *argv[])
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
 
+	//winIdSub = glutCreateSubWindow (winIdMain, 5, 5, WIDTH - 10, HEIGHT / 10);
+	//glutInitWindowPosition(250,100);
+	//winIdSub = glutCreateWindow("Fenetre fille");
+    glutReshapeFunc(resize);
+    glutDisplayFunc(display);
 	//fin initialisation OPENGL
 	//init autre
 	Camm = &Camm_fixe; //on commence avec la cam fixe

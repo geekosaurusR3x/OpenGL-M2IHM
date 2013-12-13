@@ -50,7 +50,7 @@ void Object::Load()
 	{
 		id_display_list = glGenLists(1);
 		if (debug){cout<<id_display_list<<endl;}
-		glNewList(display_list, GL_COMPILE);
+		glNewList(id_display_list, GL_COMPILE);
 			DrawChild();
 		glEndList();
 	}
