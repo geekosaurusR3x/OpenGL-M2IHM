@@ -31,7 +31,7 @@
 
 using namespace std;
 
-bool debug = true;
+bool debug;
 World Monde(1024.0);
 
 CamRotate Camm_fixe(0.0,200.0,0.0);
@@ -246,7 +246,7 @@ const GLfloat high_shininess[] = { 100.0f };
 int main(int argc, char *argv[])
 {
 	srand (time(NULL));
-	debug = true;
+	debug = false;
 	string datadir = DATA_DIR;
 	//parsage des arguments
 	const struct option longopts[] =
@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
 			break;
 		  case 'v':
 			cout << "Debug Mode Active"<<endl;
-			debug=true;
+			debug = true;
 			break;
 		  case 'd':
 			cout <<"Other Data Dir passed : "<<optarg<<endl;

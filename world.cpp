@@ -154,7 +154,7 @@ void World::Add(int choice)
 				cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
 			}
 			ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
-			ListeEolien.back().SetDebug(true);
+			ListeEolien.back().SetDebug(this->debug);
 			break;
 		case BUGDROID:
 			nbBug++;
@@ -162,7 +162,7 @@ void World::Add(int choice)
 				cout<<"Ajout d'un BugDroid en X: "<<X<<" Z: "<<Z<<endl;
 			}
 			ListeBug.push_back(BugDroid(X,Sol.GetHauteurPos(X,Z)+30,Z,Sol.GetMapScale()+5));
-			ListeBug.back().SetDebug(true);
+			ListeBug.back().SetDebug(this->debug);
 			ListeBug.back().SetDataDir(this->Data_Dir);
 			ListeBug.back().Load();
 			break;

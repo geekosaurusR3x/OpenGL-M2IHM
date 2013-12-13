@@ -1,7 +1,7 @@
 #ifndef COULEUR_H_INCLUDED
 #define COULEUR_H_INCLUDED
 
-static double blanc[] = { 1.0,1.0,1.0,1.0 };
+ static double blanc[] = { 1.0,1.0,1.0,1.0 };
  static double jaune[] = { 1.0,1.0,0.0,1.0 };
  static double cyan[] = { 0.0,1.0,1.0,1.0 };
  static double magenta[] = { 1.0,0.0,1.0,1.0 };
