@@ -10,16 +10,20 @@ Object::Object(double X, double Y, double Z,double Size)
 	this->x = X;
 	this->y = Y;
 	this->z = Z;
-	this->debug = false;
 	this->display_list = false;
 	this->texture = false;
 	this->model3D = false;
 	this->Data_Dir	 = "";
 	this->size = Size;
 	this->color = noir;
+	mylog = Loger::getInstance();
 }
 Object::~Object()
 {
+	if(display_list)
+	{
+		glDeleteLists(id_display_list,1);
+	}
 }
 
 void Object::Draw()
@@ -49,7 +53,6 @@ void Object::Load()
 	if(display_list)
 	{
 		id_display_list = glGenLists(1);
-		if (debug){cout<<id_display_list<<endl;}
 		glNewList(id_display_list, GL_COMPILE);
 			DrawChild();
 		glEndList();
@@ -76,31 +79,28 @@ void Object::LoadTextureObject(std::string name, int num)
 	}
 	catch (const jpeg_load_exception &e)
 	{
-		if (debug){cout<<e.what()<<endl;}
+		this->mylog->Append(e.what());
 	}
 }
 
 void Object::LoadInfoObject(std::string name)
 {
-	if (debug){cout<<"Recuperation des infos du model 3D..."<<endl;}
+	this->mylog->Append("Recuperation des infos du model 3D...");
 	try
 	{
 		GetModel3DInfo(this->Data_Dir+"/Models/"+name+".obj",this->nb_position,this->nb_textels,this->nb_normals,this->nb_faces,this->nb_verticles);
 	}
 	catch (const jpeg_load_exception &e)
 	{
-		if (debug){cout<<e.what()<<endl;}
+		this->mylog->Append(e.what());
 	}
-	if (debug)
-	{
-		cout<<"Recuperation des infos du model 3D FINIT"<<endl;
-		cout << "Model Info" << endl;
-		cout << "Positions: " << this->nb_position << endl;
-		cout << "Texels: " << this->nb_textels << endl;
-		cout << "Normals: " << this->nb_normals << endl;
-		cout << "Faces: " << this->nb_faces << endl;
-		cout << "Vertices: " << this->nb_verticles << endl;
-	}
+	this->mylog->Append("Recuperation des infos du model 3D FINIT");
+	this->mylog->Append("Model Info");
+	this->mylog->Append("Positions: ");
+	this->mylog->Append("Texels: "+to_string(this->nb_textels));
+	this->mylog->Append("Normals: "+to_string(this->nb_normals));
+	this->mylog->Append("Faces: "+to_string(this->nb_faces));
+	this->mylog->Append("Vertices: "+to_string(this->nb_verticles));
 }
 
 void Object::LoadDataObject(std::string name)
@@ -115,35 +115,32 @@ void Object::LoadDataObject(std::string name)
 	faces = new short [nb_verticles];
 
 	//fin de l'alocation des tableaux
-	if (debug){cout<<"Chargement du model 3D..."<<endl;}
+	this->mylog->Append("Chargement du model 3D...");
 	try
 	{
 		LoadModel3D(this->Data_Dir+"/Models/"+name+".obj",this->positions_vertex,this->texels,this->normals,this->faces);
 	}
 	catch (const jpeg_load_exception &e)
 	{
-		if (debug){cout<<e.what()<<endl;}
+		this->mylog->Append(e.what());
 	}
-	if (debug)
+	this->mylog->Append("Chargement du model 3D FINIT");
+	this->mylog->Append("Model Data :");
+	for(int i=0; i<nb_position; i++)
 	{
-		cout<<"Chargement du model 3D FINIT"<<endl;
-		cout << "Model Data" << endl;
-		for(int i=0; i<nb_position; i++)
-		{
-			cout << "P"<<i+1<<": " << positions_vertex[i] << "x " << positions_vertex[i+1] << "y " << positions_vertex[i+2] << "z" << endl;
-		}
-		for(int i=0; i<nb_textels; i++)
-		{
-			cout << "T"<<i+1<<": " << texels[i] << "u " << texels[i+1] << "v " << endl;
-		}
-		for(int i=0; i<nb_normals; i++)
-		{
-			cout << "N"<<i+1<<": " << normals[i] << "x " << normals[i+1] << "y "<<normals[i+2]<<"z "<< endl;
-		}
-		for(int i=0; i<nb_faces; i++)
-		{
-			cout << "F"<<i+1<<": " << faces[i] << "P1 " << faces[i+1] << "P2 " << faces[i+2] << "P3" << endl;
-		}
+		//this->mylog->Append("P"+to_string(i+1)+": "+to_string(positions_vertex[i])+"x "+to_string(positions_vertex[i+1])+"y "+to_string(positions_vertex[i+2])+"z");
+	}
+	for(int i=0; i<nb_textels; i++)
+	{
+		//this->mylog->Append("T"+to_string(i+1)+": "+to_string(texels[i])+"u "+to_string(texels[i+1])+"v ");
+	}
+	for(int i=0; i<nb_normals; i++)
+	{
+		//this->mylog->Append("N"+to_string(i+1)+": "+to_string(normals[i])+"x "+to_string(normals[i+1])+"y "+to_string(normals[i+2])+"z ");
+	}
+	for(int i=0; i<nb_faces; i++)
+	{
+		//this->mylog->Append("F"+to_string(i+1)+": "+to_string(faces[i])+"P1 "+to_string(faces[i+1])+"P2 "+to_string(faces[i+2])+"P3");
 	}
 }
 

@@ -64,13 +64,13 @@ void Terran::SetSizeWordl(double Size_Wordl)
 {
 	this->Size_Demi_Wordl = Size_Wordl/2;
 	this->Map_Scale = Size_Wordl/this->size;
-	if (debug){cout<<"Demi Wordl : "<<Size_Demi_Wordl<<" Map Scale : "<<Map_Scale<<endl;}
+	this->mylog->Append("Demi Wordl : "+to_string(Size_Demi_Wordl)+" Map Scale : "+to_string(Map_Scale));
 }
 
 void Terran::LoadModelMap()
 {
 	unsigned char *map = 0;
-	if (debug){cout<<"Generation du model map..."<<endl;}
+	this->mylog->Append("Generation du model map...");
 	try
 	{
 		struct jpeg_decompress_struct cinfo;
@@ -88,10 +88,10 @@ void Terran::LoadModelMap()
 	}
 	catch (const jpeg_load_exception &e)
 	{
-		if (debug){cout<<e.what()<<endl;}
+		this->mylog->Append(e.what());
 	}
 	free(map);
-	if (debug){cout<<"Generation du model map FINIT"<<endl;}
+	this->mylog->Append("Generation du model map FINIT");
 }
 
 void Terran::LoadTexture(int num)
@@ -106,13 +106,10 @@ void Terran::LoadTexture(int num)
 		name = TEXTURE_MAP_NAME_2;
 	}
 	
-	if (debug)
-	{
-		cout<<"Chargement Texture Map : "<<name<<" Numero :"<<num <<endl;
-		cout<<"Chargement de la texture de la map..."<<endl;
-	}
+	this->mylog->Append("Chargement Texture Map : "+name+" Numero :"+to_string(num));
+	this->mylog->Append("Chargement de la texture de la map...");
 	LoadTextureObject(name,0);
-	if (debug){cout<<"Chargement de la texture de la map FINIT"<<endl;}
+	this->mylog->Append("Chargement de la texture de la map FINIT");
 }
 
 int Terran::GetColorPixel(unsigned char * img, int x, int y,int pos)

@@ -13,10 +13,13 @@
 #include <stdio.h>
 #include <iostream>
 #include <getopt.h>
-#include <string.h>
+#include <string>
 #include "world.h"
 #include "cam_rotate.h"
 #include "cam_free.h"
+#include "Couleur.h"
+#include "terminal.h"
+#include "loger.h"
 
 //fin des includes 
 
@@ -32,31 +35,32 @@
 using namespace std;
 
 bool debug;
-World Monde(1024.0);
+bool terminal;
+bool free_cam = false;
 
+World Monde(1024.0);
+Terminal Term;
 CamRotate Camm_fixe(0.0,200.0,0.0);
 CamFree Camm_free(0.0,0.0,0.0);
 Camera * Camm;
+Loger *mylog;
+
 
 double scrollSensivity = 2.0;
-int frameCount = 0;
 double camx_past = 0;
 double camy_past = 0;
-bool free_cam = false;
 
+double current_time = 0;
+double last_time = 0;
+int nb_frames=0;
 int winIdMain;
 int winIdSub;
 
-void output(GLfloat x, GLfloat y, std::string text)
+//exit func
+void MyExit()
 {
-    glPushMatrix();
-    glTranslatef(x, y, 0);
-    glScalef(1, 1, 1);
-    for (int i = 0; i < (int)text.length(); i++)
-    {
-        glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
-    }
-    glPopMatrix();
+	mylog->kill();
+	 exit(EXIT_SUCCESS);
 }
 
 /* GLUT callback Handlers */
@@ -73,6 +77,14 @@ static void resize(int width, int height)
 	glLoadIdentity();
 }
 
+static void subReshape (int w, int h)
+{
+	glViewport(0,0,w,h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0,w,0,h);
+	glMatrixMode(GL_MODELVIEW);
+}
 static void display(void)
 {	
 	glutSetWindow (winIdMain);
@@ -84,9 +96,27 @@ static void display(void)
 	
 	Camm->LookAt();
 	Monde.Draw();
-	output(0,200,"test");
 	glPopMatrix();
+	//calcul des fps
+	nb_frames++;
+	current_time = glutGet(GLUT_ELAPSED_TIME);
+	if ((current_time - last_time) >= 1.0)
+    {
+      Term.SetFps((nb_frames/ (current_time - last_time))*1000);
+      nb_frames = 0;
+      last_time = current_time;
+    }
     glutSwapBuffers();
+}
+
+static void subDisplay ()
+{
+
+  /* Clear subwindow */
+  glutSetWindow (winIdSub);
+  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  Term.Draw();
+  glutSwapBuffers ();
 }
 
 
@@ -121,16 +151,34 @@ static void key(unsigned char key, int x, int y)
 			{
 				Camm = &Camm_fixe;
 			}
-			if(debug)
-			{
-				if(debug){cout<<"Free Cam : "<<free_cam<<endl;}
-			}
+			mylog->Append("Free Cam : "+to_string(free_cam));
 			break;
-		case '-':
+		case 'a':
+			terminal = !terminal;
+			mylog->Append("Terminal : "+to_string(terminal));
 			break;
 	}
 
-	glutPostRedisplay();
+	glutPostWindowRedisplay(winIdMain);
+	glutPostWindowRedisplay(winIdSub);
+}
+
+static void Subkey(unsigned char key, int x, int y)
+{
+	switch(key)
+	{
+		case 8: //backspace
+			Term.Remove();
+			break;
+		case 13: //enterkey
+			Term.Validate();
+			break;
+		default:
+			string temp = "";
+			temp+=key;
+			Term.Append(temp);
+			break;
+	}
 }
 
 void special(int key, int x, int y)
@@ -149,7 +197,7 @@ void special(int key, int x, int y)
 
 void mouseMove(int x, int y) 
 {
-	if(debug){cout<<"x: "<<x<<" y:"<<y<<endl;}
+	//mylog->Append("x: "+to_string(x)+" y:"+to_string(y));
 	int camx = x-camx_past;
 	int camy = y-camy_past;
 	if(free_cam){Camm_free.OnMouseMotion(camx,camy);}
@@ -161,7 +209,7 @@ void mouseButton(int button, int state, int x, int y)
 	if (button == GLUT_LEFT_BUTTON) {
 		if (state == GLUT_DOWN && !free_cam) {
 			Camm_fixe.TogleRotate();
-			if(debug){cout<<"Toggle Rotation : "<<Camm_fixe.IsRotateCam()<<endl;}
+			mylog->Append("Toggle Rotation : "+to_string(Camm_fixe.IsRotateCam()));
 		}
 	}
 	if (button == 3 && !free_cam)
@@ -174,12 +222,34 @@ void mouseButton(int button, int state, int x, int y)
 	}
 }
 
+void SubmouseButton(int button, int state, int x, int y) 
+{
+
+	if (button == 3)
+	{
+		Term.PreviousLine();
+	}
+	if (button == 4)
+	{
+		Term.NextLine();
+	}
+}
 
 static void idle(void)
 {
 	if(free_cam){Camm_free.SetY(Monde.GetHauteur(Camm_free.GetX(),Camm_free.GetZ())+4);}
 	Camm->Update();
 	Monde.Update(Camm->GetFlecheX(),Camm->GetFlecheY(),Camm->GetFlecheZ());
+
+	  glutSetWindow (winIdSub);
+	  if (terminal)
+	  {
+		  glutShowWindow();
+	  }
+	  else
+	  {
+		  glutHideWindow();
+	  }
 
 	glutPostWindowRedisplay(winIdMain);
 	glutPostWindowRedisplay(winIdSub);
@@ -226,7 +296,7 @@ void EolColorMenu(int choice)
 void SelectChoice(int choice)
 {
 	switch(choice) {
-    case -1 : exit(EXIT_SUCCESS); break;
+    case -1 : MyExit(); break;
 	}
 						
 }
@@ -247,7 +317,9 @@ int main(int argc, char *argv[])
 {
 	srand (time(NULL));
 	debug = false;
+	terminal = false;
 	string datadir = DATA_DIR;
+	mylog = Loger::getInstance();
 	//parsage des arguments
 	const struct option longopts[] =
 	{
@@ -285,11 +357,11 @@ int main(int argc, char *argv[])
 	  }
 	//fin
 
+	mylog->SetDebug(debug);
     glutInit(&argc, argv);
     glutInitWindowSize(WIDTH,HEIGHT);
-    glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-
+    glutInitWindowPosition(10,10);
     winIdMain = glutCreateWindow("Projet OPENGL");
 
 	int WindMenu = glutCreateMenu(WindChange);
@@ -370,19 +442,23 @@ int main(int argc, char *argv[])
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
 
-	//winIdSub = glutCreateSubWindow (winIdMain, 5, 5, WIDTH - 10, HEIGHT / 10);
-	//glutInitWindowPosition(250,100);
-	//winIdSub = glutCreateWindow("Fenetre fille");
-    glutReshapeFunc(resize);
-    glutDisplayFunc(display);
+	Monde.SetDataDir(datadir);
+	Monde.LoadWorld();
+	//fin fenetre principale
+	//sous fenetre
+	winIdSub = glutCreateSubWindow (winIdMain, 0, 0, WIDTH, HEIGHT / 3);
+	glutReshapeFunc(subReshape);
+	glutDisplayFunc(subDisplay);
+	glutMouseFunc(SubmouseButton);
+	glutKeyboardFunc(Subkey);
+	glutHideWindow();
+	
 	//fin initialisation OPENGL
 	//init autre
 	Camm = &Camm_fixe; //on commence avec la cam fixe
-	Monde.SetDebug(debug);
-	Monde.SetDataDir(datadir);
-	Monde.LoadWorld();
 	//lancement
 	glutMainLoop();
 
-    return EXIT_SUCCESS;
+	MyExit();
+    return EXIT_FAILURE;
 }

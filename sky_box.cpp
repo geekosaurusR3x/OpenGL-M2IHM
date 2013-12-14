@@ -35,18 +35,15 @@ void SkyBox::LoadTexture(int num)
 		name = TEXTURE_SKYBOX_NAME_2;
 	}
 
-	if (debug)
-	{
-		cout<<"Chargement Texture Skybox : "<<name<<" Numero :"<<num <<endl;
-		cout<<"Chargement de la texture de la skymap..."<<endl;
-	}
+	this->mylog->Append("Chargement Texture Skybox : "+name+" Numero :"+to_string(num));
+	this->mylog->Append("Chargement de la texture de la skymap...");
 	LoadTextureObject(name+"_left",0); //left
 	LoadTextureObject(name+"_front",1); //front
 	LoadTextureObject(name+"_right",2); //right
 	LoadTextureObject(name+"_back",3); //back
 	LoadTextureObject(name+"_top",4); //top
 	LoadTextureObject(name+"_bottom",5); //bottom
-	if (debug){cout<<"Chargement de la texture de la skymap FINIT"<<endl;}
+	this->mylog->Append("Chargement de la texture de la skymap FINIT");
 }
 
 void SkyBox::DrawChild()

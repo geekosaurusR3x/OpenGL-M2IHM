@@ -26,7 +26,7 @@ BugDroid::BugDroid(double X, double Y, double Z, double Size):Object(X,Y,Z,Size)
 
 void BugDroid::LoadChild()
 {
-	if (debug){cout<<"Chargement du model 3D : "+this->name<<endl;}
+	this->mylog->Append("Chargement du model 3D : "+this->name);
 	LoadInfoObject(this->name);
 	LoadDataObject(this->name);
 

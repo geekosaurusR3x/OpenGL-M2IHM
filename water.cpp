@@ -54,9 +54,7 @@ void Water::SetSizeWordl(double Size_Wordl)
 	this->Size_Demi_Wordl = Size_Wordl/2;
 	this->Map_Scale = Size_Wordl/this->size;
 
-	if(debug) {
-		cout<<"Demi Wordl : "<<Size_Demi_Wordl<<" Map Scale : "<<Map_Scale<<endl;
-	}
+	this->mylog->Append("Demi Wordl : "+to_string(Size_Demi_Wordl)+" Map Scale : "+to_string(Map_Scale));
 }
 void Water::Update()
 {
@@ -71,9 +69,7 @@ void Water::Update()
 
 void Water::GenerateWater()
 {
-	if(debug) {
-		cout<<"Generation de la mer....."<<endl;
-	}
+	this->mylog->Append("Generation de la mer.....");
 	water = new double**[(int)this->size];
 	for(int i = 0; i < (int)this->size; i++) {
 		water[i] = new double *[(int)this->size];
@@ -90,7 +86,5 @@ void Water::GenerateWater()
 		}
 	}
 
-	if(debug) {
-		cout<<"Generation de la mer FINIT"<<endl;
-	}
+	this->mylog->Append("Generation de la mer FINIT");
 }

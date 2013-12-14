@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <math.h>
+#include "loger.h"
 
 class World
 {
@@ -30,8 +31,6 @@ public:
 	~World();
 	void SetWind(double Wind);
 	double GetWind() const;
-	void SetDebug(bool debug);
-	bool IsDebug() const;
 	double GetSize() const ;
 	void LoadWorld();
 	void Add(int choice);
@@ -57,7 +56,6 @@ public:
 	}
 
 private:
-	bool debug;
 	double Wind;
 	int nbEoliene;
 	int nbBug;
@@ -73,6 +71,7 @@ private:
 	SkyBox Sky;
 	Terran Sol;
 	Water Sea;
+	Loger *mylog;
 	void InitFog();
 	void DrawObject();
 };

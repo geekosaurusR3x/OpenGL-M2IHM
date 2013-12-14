@@ -8,6 +8,7 @@
 
 #include "fonctions.h"
 #include "Couleur.h"
+#include "loger.h"
 #include <string>
 
 class Object
@@ -34,9 +35,6 @@ public:
 	void SetZ(double z) {
 		this->z = z;
 	}
-	virtual void SetDebug(bool debug) {
-		this->debug = debug;
-	}
 
 	virtual void SetDataDir(const std::string& Data_Dir) {
 		this->Data_Dir = Data_Dir;
@@ -48,7 +46,6 @@ public:
 	}
 protected :
 	//partie standar
-	bool debug;
 	bool display_list;
 	bool texture;
 	bool model3D;
@@ -57,6 +54,7 @@ protected :
 	double z;
 	double size;
 	double* color;
+	Loger *mylog;
 	std::string Data_Dir;
 	//partie texture
 	int nbtexture;

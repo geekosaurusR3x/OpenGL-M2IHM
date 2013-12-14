@@ -12,7 +12,8 @@ World::World(double size)
 	this->nbBug = 0;
 	this->Size = size;
 	this->Orientation_Wind = 0;
-	this->fog = true;
+	this->fog = false;
+	this->mylog = Loger::getInstance();
 }
 
 World::~World()
@@ -20,19 +21,12 @@ World::~World()
 }
 
 void World::SetWind(double Wind) {
-	if(debug){cout<<"Force du  vent : "<< Wind<<endl;}
 	this->Wind = Wind;
+	this->mylog->Append("Force du  vent : "+to_string(this->Wind));
 }
 double World::GetWind() const {
 	return Wind;
 }
-void World::SetDebug(bool debug) {
-	this->debug = debug;
-}
-bool World::IsDebug() const {
-	return debug;
-}
-
 double World::GetSize() const {
 	return this->Size;
 }
@@ -40,7 +34,7 @@ double World::GetSize() const {
 void  World::SetOrientationWind(int Orientation_Wind)
 {
 	this->Orientation_Wind = (this->Orientation_Wind+Orientation_Wind)%360;
-	if (debug){cout<<"Orientation du vent :"<<this->Orientation_Wind<<endl;}
+	this->mylog->Append("Orientation du vent :"+to_string(this->Orientation_Wind));
 }
 
 int World::GetOrientationWind() const
@@ -53,18 +47,15 @@ void World::LoadWorld()
 	//Ajout de la skybox
 	double Demi_Size = this->Size/2;
 	Sky = SkyBox(-Demi_Size,-Demi_Size,Demi_Size,this->Size);
-	Sky.SetDebug(this->debug);
 	Sky.SetDataDir(this->Data_Dir);
 	Sky.Load();
 	//Ajout du sol
 	Sol = Terran(-Demi_Size,-Demi_Size,Demi_Size,1);
-	Sol.SetDebug(debug);
 	Sol.SetSizeWordl(this->Size);
 	Sol.SetDataDir(this->Data_Dir);
 	Sol.Load();
 	//Ajout de l'eau
 	Sea = Water(-Demi_Size,60,Demi_Size,this->Sol.GetSize()/4);
-	Sea.SetDebug(debug);
 	Sea.SetDataDir(this->Data_Dir);
 	Sea.SetSizeWordl(this->Size);
 	Sea.Load();
@@ -73,8 +64,6 @@ void World::LoadWorld()
 	Add(BUGDROID);
 	//Ajout de la fleche
 	Arrow = Fleche(200,200,0,1);
-	Arrow.SetDebug(debug);
-
 	InitFog();
 	
 }
@@ -91,13 +80,13 @@ void World::InitFog()
 void World::FogOn()
 {
 	fog = true;
-	if (debug){cout<<"Changement etat 	brouillard : "<<fog <<endl;}
+	this->mylog->Append("Changement etat 	brouillard : "+to_string(this->fog));
 }
 
 void World::FogOff()
 {
 	fog = false;
-	if (debug){cout<<"Changement etat brouillard : "<<fog <<endl;}
+	this->mylog->Append("Changement etat brouillard : "+to_string(this->fog));
 }
 
 void World::ChangeSkybox(int num)
@@ -150,19 +139,13 @@ void World::Add(int choice)
 	{
 		case EOLIENNE:
 			nbEoliene++;
-			if(debug){
-				cout<<"Ajout d'une eolienne en X: "<<X<<" Z: "<<Z<<endl;
-			}
+			this->mylog->Append("Ajout d'une eolienne en X: "+to_string(X)+" Z: "+to_string(Z));
 			ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
-			ListeEolien.back().SetDebug(this->debug);
 			break;
 		case BUGDROID:
 			nbBug++;
-			if(debug){
-				cout<<"Ajout d'un BugDroid en X: "<<X<<" Z: "<<Z<<endl;
-			}
+			this->mylog->Append("Ajout d'un BugDroid en X: "+to_string(X)+" Z: "+to_string(Z));
 			ListeBug.push_back(BugDroid(X,Sol.GetHauteurPos(X,Z)+30,Z,Sol.GetMapScale()+5));
-			ListeBug.back().SetDebug(this->debug);
 			ListeBug.back().SetDataDir(this->Data_Dir);
 			ListeBug.back().Load();
 			break;
@@ -178,7 +161,7 @@ void World::Remove(int choice)
 			{
 				ListeEolien.pop_back();
 				nbEoliene--;
-				if(debug){cout<<"Suppression de la derniere eolienne"<<endl;}
+				this->mylog->Append("Suppression de la derniere eolienne");
 			}
 			break;
 		case BUGDROID:
@@ -186,7 +169,7 @@ void World::Remove(int choice)
 			{
 				ListeBug.pop_back();
 				nbBug--;
-				if(debug){cout<<"Suppression du dernier BugDroid"<<endl;}
+				this->mylog->Append("Suppression du dernier BugDroid");
 			}
 			break;
 	}
@@ -194,7 +177,7 @@ void World::Remove(int choice)
 
 void World::Update(double camX,double camY,double camZ)
 {
-	if(debug){cout<<"Arrox pos "<<camX<<" "<<camY<<" "<<camZ<<endl;}
+	//this->mylog->Append("Arrox pos "+to_string(camX)+" "+to_string(camY)+" "+to_string(camZ));
 	Arrow.SetX(camX);
 	Arrow.SetY(camY);
 	Arrow.SetZ(camZ);
