@@ -38,7 +38,7 @@ void CamFree::VectorsFromAngles()
 
 void CamFree::OnMouseMotion(int x, int y)
 {
-    angle_vertical += x*mouse_sensibilite;
+    angle_vertical -= x*mouse_sensibilite;
     angle_horizontal += y*mouse_sensibilite;
     VectorsFromAngles();
 }

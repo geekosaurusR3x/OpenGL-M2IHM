@@ -47,8 +47,6 @@ Loger *mylog;
 
 
 double scrollSensivity = 2.0;
-double camx_past = 0;
-double camy_past = 0;
 
 double current_time = 0;
 double last_time = 0;
@@ -141,15 +139,15 @@ static void key(unsigned char key, int x, int y)
 			break;
 		case 'c':
 			free_cam = !free_cam;
-			camx_past = x;
-			camy_past = y;
 			if(free_cam)
 			{
 				Camm = &Camm_free;
+				glutSetCursor(GLUT_CURSOR_CROSSHAIR);
 			}
 			else
 			{
 				Camm = &Camm_fixe;
+				glutSetCursor(GLUT_CURSOR_INFO);
 			}
 			mylog->Append("Free Cam : "+to_string(free_cam));
 			break;
@@ -198,8 +196,8 @@ void special(int key, int x, int y)
 void mouseMove(int x, int y) 
 {
 	//mylog->Append("x: "+to_string(x)+" y:"+to_string(y));
-	int camx = x-camx_past;
-	int camy = y-camy_past;
+	int camx = -(x-(WIDTH/2));
+	int camy = y-(HEIGHT/2);
 	if(free_cam){Camm_free.OnMouseMotion(camx,camy);}
 	
 }
@@ -444,9 +442,11 @@ int main(int argc, char *argv[])
 
 	Monde.SetDataDir(datadir);
 	Monde.LoadWorld();
+	glutSetCursor(GLUT_CURSOR_INFO);
 	//fin fenetre principale
 	//sous fenetre
 	winIdSub = glutCreateSubWindow (winIdMain, 0, 0, WIDTH, HEIGHT / 3);
+	//winIdSub = glutCreateWindow ("Test");
 	glutReshapeFunc(subReshape);
 	glutDisplayFunc(subDisplay);
 	glutMouseFunc(SubmouseButton);
