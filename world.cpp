@@ -80,7 +80,7 @@ void World::InitFog()
 void World::FogOn()
 {
 	fog = true;
-	this->mylog->Append("Changement etat 	brouillard : "+to_string(this->fog));
+	this->mylog->Append("Changement etat brouillard : "+to_string(this->fog));
 }
 
 void World::FogOff()
@@ -205,4 +205,31 @@ void World::ChangerColorEolienne(int num)
 double World::GetHauteur(double X, double Y)
 {
 	return Sol.GetHauteurPos(X,Y);
+}
+
+void World::Interprate(std::string cmd)
+{
+	stringstream stream(cmd);
+	string val;
+	getline(stream, val, ' ');
+	if(val == "fog")
+	{
+		getline(stream, val, ' ');
+		if(val == "1")
+		{
+			FogOn();
+		}
+		else if (val == "0")
+		{
+			FogOff();
+		}
+		else
+		{
+			this->mylog->Append("Wordl -> fog : "+val+" unknow value");
+		}
+	}
+	else
+	{
+		this->mylog->Append("World : "+val+" unknow commande");
+	}
 }

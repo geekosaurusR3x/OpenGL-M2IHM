@@ -2,6 +2,7 @@
 #define WORLD_H
 #define EOLIENNE 1
 #define BUGDROID 2
+#define INTERPRATE_NAME_WORLD "World"
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -36,6 +37,7 @@ public:
 	void Add(int choice);
 	void Remove(int choice);
 	void Draw();
+	void Interprate(std::string cmd);
 
 	void SetOrientationWind(int Orientation_Wind);
 	int GetOrientationWind() const;

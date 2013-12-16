@@ -36,6 +36,7 @@ using namespace std;
 
 bool debug;
 bool terminal;
+bool help;
 bool free_cam = false;
 
 World Monde(1024.0);
@@ -53,6 +54,7 @@ double last_time = 0;
 int nb_frames=0;
 int winIdMain;
 int winIdSub;
+int winHelp;
 
 //exit func
 void MyExit()
@@ -117,7 +119,36 @@ static void subDisplay ()
   glutSwapBuffers ();
 }
 
-
+static void helpDisplay()
+{
+	glutSetWindow(winHelp);
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Term.WriteLine(2,2,"F1 pour afficher / masquer l'aide ",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,17,"a pour afficher / masquer le terminal ",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,34,"e pour quitter ",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,51,"c pour changer de mode de camera ",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,68,"<- -> pour changer l'orientation du vent ",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,85,"Click droit pour afficher le menu contextuel",GLUT_BITMAP_9_BY_15);
+	
+	Term.WriteLine(2,585,"En mode camera freefly :",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,568,"z pour avance",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,551,"q pour se deplacer vers la gauche",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,534,"d pour se deplacer vers la droite",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,517,"s pour reculer",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(2,500,"Bouger les sourie pour bouger le curseur",GLUT_BITMAP_9_BY_15);
+	
+	Term.WriteLine(350,585,"En mode camera tournante :",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(350,568,"Molette de la sourie pour zoomer/dezoomer",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(350,551,"Click gauche pour arreter/stoper le mouvement",GLUT_BITMAP_9_BY_15);
+	
+	Term.WriteLine(200,385,"Dans le terminal :",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(200,368,"Molette de la sourie pour monter descendre le log",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(200,351,"Taper un texte pour utiliser l'interpreteur :",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(220,334,"exit pour quitter",GLUT_BITMAP_9_BY_15);
+	Term.WriteLine(220,317,"World.fog 0/1 pour afficher masquer le brouillard",GLUT_BITMAP_9_BY_15);
+	
+	glutSwapBuffers ();
+}
 static void key(unsigned char key, int x, int y)
 {
 	switch (key)
@@ -161,6 +192,26 @@ static void key(unsigned char key, int x, int y)
 	glutPostWindowRedisplay(winIdSub);
 }
 
+void Interprate(std::string cmd)
+{
+	stringstream stream(cmd);
+	string val;
+	getline(stream, val, '.');
+	if(val == INTERPRATE_NAME_WORLD)
+	{
+		getline(stream, val, '.');
+		Monde.Interprate(val);
+	}
+	else if( val == "exit")
+	{
+		MyExit();
+	}
+	else
+	{
+		mylog->Append("Master : "+val+" unknow commande");
+	}
+}
+
 static void Subkey(unsigned char key, int x, int y)
 {
 	switch(key)
@@ -169,7 +220,7 @@ static void Subkey(unsigned char key, int x, int y)
 			Term.Remove();
 			break;
 		case 13: //enterkey
-			Term.Validate();
+			Interprate(Term.Validate());
 			break;
 		default:
 			string temp = "";
@@ -190,6 +241,9 @@ void special(int key, int x, int y)
         case GLUT_KEY_RIGHT :
 			Monde.SetOrientationWind(-5);
             break;
+		case GLUT_KEY_F1 :
+			help = !help;
+			
     }
 }
 
@@ -249,8 +303,19 @@ static void idle(void)
 		  glutHideWindow();
 	  }
 
+	  glutSetWindow (winHelp);
+	  if (help)
+	  {
+		  glutShowWindow();
+	  }
+	  else
+	  {
+		  glutHideWindow();
+	  }
+	  
 	glutPostWindowRedisplay(winIdMain);
 	glutPostWindowRedisplay(winIdSub);
+	glutPostWindowRedisplay(winHelp);
 }
 
 void WindChange(int choice)
@@ -278,6 +343,14 @@ void FogEnableMenu(int choice)
 	switch(choice) {
 		case 0 : Monde.FogOn();break;
 		case 1 : Monde.FogOff();break;
+	}
+}
+
+void HelpEnableMenu(int choice)
+{
+	switch(choice) {
+		case 0 : help = true;break;
+		case 1 : help = false;break;
 	}
 }
 
@@ -393,6 +466,10 @@ int main(int argc, char *argv[])
 	int FogMenu = glutCreateMenu(FogEnableMenu);
 		glutAddMenuEntry("Oui",0);
 		glutAddMenuEntry("Non",1);
+		
+	int HelpMenu = glutCreateMenu(HelpEnableMenu);
+		glutAddMenuEntry("Oui",0);
+		glutAddMenuEntry("Non",1);
           
 	int MapMenu = glutCreateMenu(TextureMapMenu);
 		glutAddMenuEntry("Texture herbe",TEXTURE_MAP_1);
@@ -405,6 +482,7 @@ int main(int argc, char *argv[])
 		glutAddSubMenu("Changer Skybox",SkyMenu);
 		glutAddSubMenu("Brouyard",FogMenu);
 		glutAddSubMenu("Sol",MapMenu);
+		glutAddSubMenu("Aide",HelpMenu);
 		glutAddMenuEntry("Quitter",-1);
 	//menu		
 
@@ -446,11 +524,17 @@ int main(int argc, char *argv[])
 	//fin fenetre principale
 	//sous fenetre
 	winIdSub = glutCreateSubWindow (winIdMain, 0, 0, WIDTH, HEIGHT / 3);
-	//winIdSub = glutCreateWindow ("Test");
 	glutReshapeFunc(subReshape);
 	glutDisplayFunc(subDisplay);
 	glutMouseFunc(SubmouseButton);
 	glutKeyboardFunc(Subkey);
+	glutHideWindow();
+	//fenetre d'aide
+	glutInitWindowPosition(200,200);
+	winHelp = glutCreateWindow ("Help");
+	glutReshapeFunc(subReshape);
+	glutDisplayFunc(helpDisplay);
+	glutSpecialFunc(special);
 	glutHideWindow();
 	
 	//fin initialisation OPENGL

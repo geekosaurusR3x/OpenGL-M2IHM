@@ -24,9 +24,9 @@ public:
 	void Append(std::string input);
 	void Remove();
 	std::string Validate();
+	void WriteLine(int x,int y,std::string string,void *font);
 private:
 	int fps;
-	void WriteLine(int x,int y,std::string string,void *font);
 	Loger *mylog;
 	int _beforeLine;
 	int _nblinedisplay;
