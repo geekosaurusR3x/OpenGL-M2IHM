@@ -18,6 +18,10 @@ public:
 	void SetFps(int fps) {
 		this->fps = fps;
 	}
+
+	int GetFps() const {
+		return fps;
+	}
 	void Draw();
 	void PreviousLine();
 	void NextLine();

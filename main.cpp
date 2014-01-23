@@ -51,6 +51,7 @@ double scrollSensivity = 2.0;
 
 double current_time = 0;
 double last_time = 0;
+double start_time_minus_five_fps = 0;
 int nb_frames=0;
 int winIdMain;
 int winIdSub;
@@ -106,6 +107,14 @@ static void display(void)
       nb_frames = 0;
       last_time = current_time;
     }
+	if (Term.GetFps() <= 5 && Monde.IsBench())
+	{
+		if((current_time - start_time_minus_five_fps)>=15000.0) //15seconds
+		{
+				Monde.StopBench();
+		}
+		start_time_minus_five_fps = current_time;
+	}
     glutSwapBuffers();
 }
 
@@ -372,6 +381,11 @@ void SelectChoice(int choice)
 						
 }
 
+void StartBench(int choice)
+{
+	Monde.StartBench();
+}
+
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -435,6 +449,9 @@ int main(int argc, char *argv[])
     glutInitWindowPosition(10,10);
     winIdMain = glutCreateWindow("Projet OPENGL");
 
+	int BenchMenu = glutCreateMenu(StartBench);
+		glutAddMenuEntry("Start",0);
+		
 	int WindMenu = glutCreateMenu(WindChange);
 		glutAddMenuEntry("Nul",0);
 		glutAddMenuEntry("Lent",80);
@@ -476,6 +493,7 @@ int main(int argc, char *argv[])
 		glutAddMenuEntry("Texture Zerg",TEXTURE_MAP_2);
 		
 	glutCreateMenu(SelectChoice);
+		glutAddSubMenu("Benchmark",BenchMenu);
 		glutAddSubMenu("Force du vent",WindMenu);
 		glutAddSubMenu("Eoliennes",EolMenu);
 		glutAddSubMenu("BugDroid",BugASMenu);

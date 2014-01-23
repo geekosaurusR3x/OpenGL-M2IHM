@@ -1,6 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 #define EOLIENNE 1
+#define EOLIENNE_BENCH 3
 #define BUGDROID 2
 #define INTERPRATE_NAME_WORLD "World"
 
@@ -49,7 +50,7 @@ public:
 	void ChangerColorEolienne(int num);
 	void Update(double camX,double camY,double camZ);
 	double GetHauteur(double X,double Y);
-	
+
 	void SetDataDir(const std::string& Data_Dir) {
 		this->Data_Dir = Data_Dir;
 	}
@@ -57,16 +58,30 @@ public:
 		return Data_Dir;
 	}
 
+	void StartBench();
+
+	bool IsBench() const {
+		return bench;
+	}
+
+	void StopBench();
+
+	int GetNbEolieneBench() const {
+		return nbEoliene_Bench;
+	}
 private:
 	double Wind;
 	int nbEoliene;
+	int nbEoliene_Bench;
 	int nbBug;
 	double Size;
 	int Orientation_Wind;
 	bool fog;
+	bool bench;
 	std::string Data_Dir;
 
 	std::vector<Eolien> ListeEolien;
+	std::vector<Eolien> ListeEolienBench;
 	std::vector<BugDroid> ListeBug;
 
 	Fleche Arrow;

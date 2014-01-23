@@ -9,11 +9,13 @@ World::World(double size)
 {
 	this->Wind = 0;
 	this->nbEoliene = 0;
+	this->nbEoliene_Bench = 0;
 	this->nbBug = 0;
 	this->Size = size;
 	this->Orientation_Wind = 0;
 	this->fog = false;
 	this->mylog = Loger::getInstance();
+	this->bench = false;
 }
 
 World::~World()
@@ -122,6 +124,12 @@ void World::DrawObject()
 		ListeBug[i].Draw();
 	}
 	
+	//Boucle Affichage eoliennes bench
+	for(size_t i=0;i<ListeEolienBench.size();++i)
+	{
+		ListeEolienBench[i].Draw();
+	}	
+	
 }
 
 void World::ChangeTextureMap(int num)
@@ -142,6 +150,13 @@ void World::Add(int choice)
 			this->mylog->Append("Ajout d'une eolienne en X: "+to_string(X)+" Z: "+to_string(Z));
 			ListeEolien.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
 			break;
+			
+		case EOLIENNE_BENCH:
+			nbEoliene_Bench++;
+			this->mylog->Append("Ajout d'une eolienne de bench en X: "+to_string(X)+" Z: "+to_string(Z));
+			ListeEolienBench.push_back(Eolien(X,Sol.GetHauteurPos(X,Z),Z,Sol.GetMapScale()));
+			break;
+			
 		case BUGDROID:
 			nbBug++;
 			this->mylog->Append("Ajout d'un BugDroid en X: "+to_string(X)+" Z: "+to_string(Z));
@@ -192,6 +207,18 @@ void World::Update(double camX,double camY,double camZ)
 		ListeEolien[i].SetOrientationVent(this->Orientation_Wind);
 		ListeEolien[i].SetWind(this->Wind);
 	}
+	//Boucle de mise a jour des eoliennes de bench
+	for(size_t i=0;i<ListeEolienBench.size();++i)
+	{
+		ListeEolienBench[i].SetColor(EOLIEN_COULEUR_3);
+		ListeEolienBench[i].SetOrientationVent(this->Orientation_Wind);
+		ListeEolienBench[i].SetWind(this->Wind);
+	}
+	if(this->IsBench())
+	{
+		this->Add(EOLIENNE_BENCH);
+	}
+	
 }
 
 void World::ChangerColorEolienne(int num)
@@ -232,4 +259,18 @@ void World::Interprate(std::string cmd)
 	{
 		this->mylog->Append("World : "+val+" unknow commande");
 	}
+}
+
+void World::StartBench()
+{
+	this->mylog->Append("Demarage d'EolBench... Risque de lourdement ralentire la machine");
+	this->bench = true;
+}
+	
+void World::StopBench()
+{
+	this->bench = false;
+	this->ListeEolienBench.clear();
+	this->mylog->Append("Fin d'EolBench... nombre D'eoliennes : "+to_string(nbEoliene_Bench));
+	this->nbEoliene_Bench = 0;
 }
