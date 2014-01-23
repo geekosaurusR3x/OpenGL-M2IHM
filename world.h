@@ -70,6 +70,8 @@ public:
 	int GetNbEolieneBench() const {
 		return nbEoliene_Bench;
 	}
+	
+	void TogleLight(unsigned char key);
 private:
 	double Wind;
 	int nbEoliene;

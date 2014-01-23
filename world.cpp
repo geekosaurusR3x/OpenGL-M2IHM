@@ -48,6 +48,7 @@ void World::LoadWorld()
 {
 	//Ajout de la skybox
 	Lu = Lumieres();
+	Lu.Interupteur_soleil();
 	double Demi_Size = this->Size/2;
 	Sky = SkyBox(-Demi_Size,-Demi_Size,Demi_Size,this->Size);
 	Sky.SetDataDir(this->Data_Dir);
@@ -105,6 +106,7 @@ void World::Draw()
 
 void World::DrawObject()
 {
+	Lu.Draw();
 	//Affichange de la skybox
 	Sky.Draw();
 	//Affichange du sol
@@ -274,4 +276,26 @@ void World::StopBench()
 	this->ListeEolienBench.clear();
 	this->mylog->Append("Fin d'EolBench... nombre D'eoliennes : "+to_string(nbEoliene_Bench));
 	this->nbEoliene_Bench = 0;
+}
+
+void World::TogleLight(unsigned char key)
+{
+	switch(key)
+	{
+		case '0':
+			Lu.Interupteur_soleil();
+			break;
+		case '1':
+			Lu.Interupteur_p1();
+			break;
+		case '2':
+			Lu.Interupteur_p2();
+			break;
+		case '3':
+			Lu.Interupteur_p3();
+			break;
+		case '4':
+			Lu.Interupteur_p4();
+			break;
+	}
 }
