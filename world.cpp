@@ -242,11 +242,11 @@ void World::Interprate(std::string cmd)
 	if(val == "fog")
 	{
 		getline(stream, val, ' ');
-		if(val == "1")
+		if(val == "true")
 		{
 			FogOn();
 		}
-		else if (val == "0")
+		else if (val == "false")
 		{
 			FogOff();
 		}

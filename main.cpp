@@ -38,6 +38,7 @@ bool debug;
 bool terminal;
 bool help;
 bool free_cam = false;
+bool under_five_fps = false;
 
 World Monde(1024.0);
 Terminal Term;
@@ -107,13 +108,26 @@ static void display(void)
       nb_frames = 0;
       last_time = current_time;
     }
+	if(under_five_fps && Term.GetFps() > 5)
+	{
+		under_five_fps = false;
+		mylog->Append("Passage au dessus des 5 fps");
+	}
 	if (Term.GetFps() <= 5 && Monde.IsBench())
 	{
+		
+		if(!under_five_fps)
+		{
+			start_time_minus_five_fps = current_time;
+			under_five_fps = true;
+			mylog->Append("Passage en desous des 5 fps");
+		}
+		
 		if((current_time - start_time_minus_five_fps)>=15000.0) //15seconds
 		{
 				Monde.StopBench();
+				under_five_fps = false;
 		}
-		start_time_minus_five_fps = current_time;
 	}
     glutSwapBuffers();
 }
@@ -214,6 +228,14 @@ void Interprate(std::string cmd)
 	else if( val == "exit")
 	{
 		MyExit();
+	}
+	else if( val == "start bench")
+	{
+		Monde.StartBench();
+	}
+	else if( val == "stop bench")
+	{
+		Monde.StopBench();
 	}
 	else
 	{
@@ -381,9 +403,12 @@ void SelectChoice(int choice)
 						
 }
 
-void StartBench(int choice)
+void SelectBench(int choice)
 {
-	Monde.StartBench();
+	switch(choice) {
+    case 0 : Monde.StartBench(); break;
+	case 1 : Monde.StopBench(); break;
+	}
 }
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -449,8 +474,9 @@ int main(int argc, char *argv[])
     glutInitWindowPosition(10,10);
     winIdMain = glutCreateWindow("Projet OPENGL");
 
-	int BenchMenu = glutCreateMenu(StartBench);
+	int BenchMenu = glutCreateMenu(SelectBench);
 		glutAddMenuEntry("Start",0);
+		glutAddMenuEntry("Stop",1);
 		
 	int WindMenu = glutCreateMenu(WindChange);
 		glutAddMenuEntry("Nul",0);
