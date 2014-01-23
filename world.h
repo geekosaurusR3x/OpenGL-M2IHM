@@ -19,6 +19,7 @@
 #include "water.h"
 #include "fonctions.h"
 #include "bug_droid.h"
+#include "Lumieres.h"
 
 #include <string>
 #include <vector>
@@ -89,6 +90,7 @@ private:
 	Terran Sol;
 	Water Sea;
 	Loger *mylog;
+	Lumieres Lu;
 	void InitFog();
 	void DrawObject();
 };

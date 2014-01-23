@@ -47,6 +47,7 @@ int World::GetOrientationWind() const
 void World::LoadWorld()
 {
 	//Ajout de la skybox
+	Lu = Lumieres();
 	double Demi_Size = this->Size/2;
 	Sky = SkyBox(-Demi_Size,-Demi_Size,Demi_Size,this->Size);
 	Sky.SetDataDir(this->Data_Dir);
