@@ -214,7 +214,7 @@ static void key(unsigned char key, int x, int y)
 		case '2':
 		case '3':
 		case '4':
-			Monde.TogleLight(key);xit
+			Monde.TogleLight(key);
 			break;
 		
 	}
