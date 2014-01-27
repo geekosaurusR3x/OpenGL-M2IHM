@@ -9,6 +9,9 @@ libjpeg
 
 -std=c++11
 
+After compiling, juste move OpenGL_M2IHM binary from OpenGL-M2IHM/Debug to OpenGL-M2IHM directory
+After that juste run OpenGL_M2IHM binary
+
 Parametres :
  -v / --verbose : print somes outputs for debugin
  -d "WhaterverDir" / --datadir "WhaterverDir" : Change data dir
